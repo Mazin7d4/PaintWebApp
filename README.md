@@ -58,3 +58,17 @@ PaintStudioCLI.playAnimation();
 // Query current canvas state headlessly
 console.log(PaintStudioCLI.getCanvasState());
 ```
+
+---
+
+## 🚀 GitHub Pages Deployment
+
+This repository now includes a GitHub Actions workflow at `.github/workflows/deploy-pages.yml` that deploys the static site to GitHub Pages.
+
+1. Open **Settings > Pages** in this repository.
+2. In **Build and deployment**, set **Source** to **GitHub Actions** (if GitHub prompts for source selection).
+3. Push changes to `main` (or run the workflow manually from the **Actions** tab) to trigger deployment.
+4. After a successful run, the site is available at:
+   - https://mazin7d4.github.io/PaintWebApp/
+
+Future pushes to `main` redeploy automatically.
