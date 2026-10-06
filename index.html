@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Paint Studio 🎨</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,7 +88,156 @@
                 </button>
             </div>
         </footer>
+=======
+    <title>Paint Studio Pro 🎨 | Animation & AI Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Studio Header -->
+    <header class="studio-header">
+        <div class="brand-block">
+            <span class="logo-yellow-box">GOOD</span>
+            <span class="brand-title">PAINT STUDIO</span>
+            <span class="brand-tag">PRO 60FPS</span>
+        </div>
+
+        <div class="header-actions">
+            <div class="template-selector-group">
+                <label for="templateSelect">Preset:</label>
+                <select id="templateSelect" class="select-input" aria-label="Select Canvas Preset">
+                    <option value="custom">Custom Studio (1080x720)</option>
+                    <option value="youtube">YouTube Video (16:9 - 1920x1080)</option>
+                    <option value="shorts">YouTube Shorts / Reels (9:16 - 1080x1920)</option>
+                    <option value="insta">Instagram Post (1:1 - 1080x1080)</option>
+                    <option value="banner">Web Banner (3:1 - 1200x400)</option>
+                </select>
+            </div>
+
+            <button id="toggleCliBtn" class="btn-yellow" aria-label="Toggle AI CLI Console">
+                <span>🤖 AI CLI</span>
+            </button>
+            <button id="saveButton" class="btn-yellow" aria-label="Export Render PNG/Animation">
+                <span>💾 Export</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Studio Main Workspace Body -->
+    <div class="studio-body">
+        <!-- Sidebar Tool Selector -->
+        <aside class="tools-sidebar" role="toolbar" aria-label="Drawing Tools">
+            <button class="tool-btn active" data-tool="pen" title="Pen Tool (P)" aria-label="Pen Tool">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </button>
+            <button class="tool-btn" data-tool="eraser" title="Eraser Tool (E)" aria-label="Eraser Tool">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 20H7L3 16C2 15 2 13 3 12L13 2L22 11L18 15"/><path d="M18 11L11 18"/></svg>
+            </button>
+            <button class="tool-btn" data-tool="line" title="Line Tool (L)" aria-label="Line Tool">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/></svg>
+            </button>
+            <button class="tool-btn" data-tool="rect" title="Rectangle Tool (R)" aria-label="Rectangle Tool">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            </button>
+            <button class="tool-btn" data-tool="circle" title="Circle Tool (C)" aria-label="Circle Tool">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>
+            </button>
+
+            <div class="sidebar-divider"></div>
+
+            <button id="clearButton" class="tool-btn" title="Clear Canvas" aria-label="Clear Canvas">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </aside>
+
+        <!-- Main Canvas Stage Area -->
+        <main class="canvas-stage">
+            <!-- Floating Canvas Properties Bar -->
+            <div class="stage-floating-bar">
+                <div class="control-item">
+                    <label>Color:</label>
+                    <div class="color-swatch-picker">
+                        <button type="button" class="color-dot active" data-color="#1A1A1A" style="background: #1A1A1A;" aria-label="Black"></button>
+                        <button type="button" class="color-dot" data-color="#FAD400" style="background: #FAD400;" aria-label="Yellow"></button>
+                        <button type="button" class="color-dot" data-color="#EF4444" style="background: #EF4444;" aria-label="Red"></button>
+                        <button type="button" class="color-dot" data-color="#3B82F6" style="background: #3B82F6;" aria-label="Blue"></button>
+                        <button type="button" class="color-dot" data-color="#FFFFFF" style="background: #FFFFFF;" aria-label="White"></button>
+                        <input type="color" id="colorPicker" value="#1A1A1A" aria-label="Custom Color Picker">
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <label for="brushSize">Size:</label>
+                    <input type="range" id="brushSize" class="slider-input" min="1" max="100" value="8" aria-label="Brush Size">
+                    <span id="brushSizeDisplay" class="val-badge">8px</span>
+                </div>
+
+                <div class="control-item">
+                    <label for="sfxToggle">SFX:</label>
+                    <input type="checkbox" id="sfxToggle" checked aria-label="Toggle Sound Effects">
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="stage-wrapper" id="stageWrapper">
+                <canvas id="paintCanvas" aria-label="Interactive Canvas Stage"></canvas>
+            </div>
+        </main>
+
+        <!-- Right Layers & Properties Panel -->
+        <aside class="layers-panel" aria-label="Canvas Layers Panel">
+            <div class="panel-header">
+                <span>LAYERS</span>
+                <button id="addLayerBtn" class="panel-btn" aria-label="Add New Layer">+ ADD</button>
+            </div>
+            <div class="layers-list" id="layersList">
+                <!-- Dynamically populated layers -->
+            </div>
+        </aside>
     </div>
+
+    <!-- Bottom Frame Animation Timeline Bar -->
+    <footer class="timeline-bar" aria-label="60 FPS Animation Timeline">
+        <div class="timeline-controls">
+            <button id="playAnimBtn" class="btn-yellow" aria-label="Play Animation">
+                <span>▶ PLAY</span>
+            </button>
+            <button id="addFrameBtn" class="btn-black" aria-label="Add New Frame">
+                <span>+ FRAME</span>
+            </button>
+            <button id="deleteFrameBtn" class="btn-black" aria-label="Delete Current Frame">
+                <span>🗑 DEL</span>
+            </button>
+        </div>
+
+        <div class="frames-timeline" id="framesTimeline">
+            <!-- Dynamically populated frame thumbs -->
+        </div>
+
+        <div class="fps-control">
+            <label for="fpsInput">FPS:</label>
+            <input type="number" id="fpsInput" class="select-input" value="12" min="1" max="60" style="width: 50px;">
+        </div>
+    </footer>
+
+    <!-- AI CLI Console Modal Drawer -->
+    <div class="cli-drawer" id="cliDrawer">
+        <div class="cli-header">
+            <span>🤖 PAINT STUDIO AI CLI</span>
+            <button id="closeCliBtn" class="panel-btn">✕</button>
+        </div>
+        <div class="cli-body">
+            <div class="cli-output" id="cliOutput">
+                > PaintStudioCLI Engine Ready v2.0
+                > Run commands or execute AI scripts headlessly.
+            </div>
+            <input type="text" id="cliInput" class="cli-input" placeholder="Type CLI command e.g., draw line or select shorts..." aria-label="CLI Input Command">
+        </div>
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

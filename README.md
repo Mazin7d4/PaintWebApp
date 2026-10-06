@@ -1,71 +1,60 @@
-## Getting Started
-To use, simply [open the hosted app in your web browser.](https://funny-rabanadas-0f5f32.netlify.app/). You can start drawing immediately without any setup required.
+# Paint Studio Pro 🎨
 
-Work in progress, only works on desktop. 
+A modern, high-contrast, multi-layer canvas animation studio and graphic design app built for high performance and AI automation.
 
-## Paint Web App
-Welcome to the Paint Web App! This simple yet powerful app allows you to unleash your creativity by painting on a digital canvas. With various features such as color selection, brush size adjustment, and the ability to save your creations.
+[🚀 Open Live App on GitHub Pages](https://mazin7d4.github.io/PaintWebApp/)
 
-## Features
-Canvas Drawing: Use your mouse to draw anything you want on the canvas.
+---
 
-Color Selection: Choose from a wide range of colors using the color picker.
+## 🔥 Features & Capabilities
 
-Brush Size Adjustment: Customize the size of your brush to fit your drawing needs.
+- **High-Contrast Black & Yellow Design System**: Bold geometric aesthetic inspired by modern graphic design guidelines (`#1A1A1A` deep black & `#FAD400` electric yellow).
+- **Preset Canvas Templates**:
+  - YouTube Video (16:9 - 1920x1080)
+  - YouTube Shorts / Instagram Reels (9:16 - 1080x1920)
+  - Instagram Post (1:1 - 1080x1080)
+  - Twitter / Web Banner (3:1 - 1200x400)
+  - Custom Desktop Studio
+- **Multi-Layer Drawing Engine**: Add, reorder, toggle visibility, and draw on isolated canvas layers.
+- **60 FPS Frame Animation Timeline**: Create frame-by-frame animations, adjust FPS playback speed, and loop playback seamlessly.
+- **AI-Driven Scriptable CLI (`window.PaintStudioCLI`)**:
+  - Programmable execution engine allowing AI agents to create drawings, switch layers, set keyframes, play animations, and export renders headlessly without screenshot dependency.
+- **Built-in Interactive SFX**: Real-time synthesized Web Audio UI sound effects.
 
-Clear Canvas: Easily clear the canvas to start a new masterpiece.
+---
 
-Save Your Artwork: Save your creations as PNG files to share or print them later.
+## 🛠️ Tech Stack
 
+- **HTML5 Canvas** (2D Context Rendering & Layer Composition)
+- **CSS3** (High-contrast Black/Yellow geometric design system)
+- **Vanilla JS** (Zero dependencies, CLI engine & Web Audio SFX)
 
-## Usage
-Drawing: Click and drag your mouse on the canvas to draw.
+---
 
-Color Selection: Use the color picker to choose your desired color.
+## 🤖 AI CLI Automation Interface
 
-Brush Size: Adjust the brush size using the slider.
+AI agents can execute commands directly in the browser context via `window.PaintStudioCLI`:
 
-Clear Canvas: Click the "Clear" button to erase everything on the canvas.
+```js
+// Select canvas preset
+PaintStudioCLI.selectTemplate('shorts'); // 'youtube', 'shorts', 'insta', 'banner'
 
-Save Artwork: Click the "Save" button to download your drawing as a PNG file.
+// Create a new layer
+PaintStudioCLI.addLayer('Background Layer');
 
-## Screenshots
+// Execute drawing command programmatically
+PaintStudioCLI.draw({
+  tool: 'pen',
+  color: '#FAD400',
+  size: 10,
+  path: [{x: 50, y: 50}, {x: 100, y: 100}, {x: 200, y: 150}]
+});
 
-![ChangeColor](RGB.png)
+// Add animation frame & set FPS
+PaintStudioCLI.addFrame();
+PaintStudioCLI.setFPS(60);
+PaintStudioCLI.playAnimation();
 
-![Screenshot](Screenshot.png)
-
-
-## Installation
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/PaintWebApp.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd PaintWebApp
-    ```
-## Contributing
-
-1. Fork the repository.
-2. Create a new branch:
-    ```bash
-    git checkout -b feature-branch
-    ```
-3. Make your changes.
-4. Commit your changes:
-    ```bash
-    git commit -m "Add new feature"
-    ```
-5. Push to the branch:
-    ```bash
-    git push origin feature-branch
-    ```
-6. Open a pull request..
-
-
-## Technologies Used
-HTML5
-CSS3
-JavaScript
+// Query current canvas state headlessly
+console.log(PaintStudioCLI.getCanvasState());
+```

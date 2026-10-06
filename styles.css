@@ -1,4 +1,5 @@
 :root {
+<<<<<<< HEAD
     --bg-primary: #0F172A;
     --bg-secondary: #1E293B;
     --card-bg: rgba(30, 41, 59, 0.75);
@@ -13,6 +14,21 @@
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
     --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
     --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+=======
+    --bg-dark: #121212;
+    --brand-black: #1A1A1A;
+    --brand-yellow: #FAD400;
+    --brand-yellow-hover: #E0BD00;
+    --brand-white: #FFFFFF;
+    --brand-gray-light: #F4F4F5;
+    --brand-gray-border: #E4E4E7;
+    --brand-gray-dark: #27272A;
+    --text-dark: #18181B;
+    --text-muted: #71717A;
+    --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --box-shadow-sharp: 4px 4px 0px #1A1A1A;
+    --box-shadow-yellow: 4px 4px 0px #FAD400;
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
 }
 
 * {
@@ -23,12 +39,20 @@
 
 body {
     font-family: var(--font-family);
+<<<<<<< HEAD
     background-color: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+=======
+    background-color: var(--brand-gray-light);
+    color: var(--text-dark);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
     overflow: hidden;
     position: relative;
 }
@@ -48,6 +72,7 @@ body {
     pointer-events: none;
 }
 
+<<<<<<< HEAD
 .container {
     width: 92vw;
     max-width: 1100px;
@@ -250,10 +275,364 @@ canvas:focus-visible {
 
 .swatches-container {
     display: flex;
+=======
+/* App Header */
+.studio-header {
+    background-color: var(--brand-black);
+    color: var(--brand-white);
+    height: 56px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--brand-yellow);
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-yellow-box {
+    background-color: var(--brand-yellow);
+    color: var(--brand-black);
+    font-weight: 900;
+    font-size: 1.1rem;
+    padding: 4px 10px;
+    letter-spacing: -0.03em;
+    border: 2px solid var(--brand-white);
+}
+
+.brand-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brand-white);
+    letter-spacing: -0.02em;
+}
+
+.brand-tag {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.template-selector-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brand-gray-dark);
+    padding: 4px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.template-selector-group label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--brand-yellow);
+    text-transform: uppercase;
+}
+
+.select-input {
+    background: var(--brand-black);
+    color: var(--brand-white);
+    border: 1px solid var(--brand-yellow);
+    padding: 4px 8px;
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Studio Workspace Layout */
+.studio-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    position: relative;
+}
+
+/* Sidebar Toolbars */
+.tools-sidebar {
+    width: 64px;
+    background: var(--brand-black);
+    border-right: 2px solid var(--brand-black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    gap: 12px;
+}
+
+.tool-btn {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 2px solid transparent;
+    color: var(--brand-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tool-btn:hover {
+    background: rgba(250, 212, 0, 0.15);
+    color: var(--brand-yellow);
+}
+
+.tool-btn.active {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    border: 2px solid var(--brand-black);
+    box-shadow: 2px 2px 0px var(--brand-white);
+}
+
+.sidebar-divider {
+    width: 32px;
+    height: 2px;
+    background: var(--brand-gray-dark);
+}
+
+/* Main Studio Stage */
+.canvas-stage {
+    flex: 1;
+    background-color: #E2E8F0;
+    background-image:
+        linear-gradient(rgba(26, 26, 26, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    overflow: auto;
+}
+
+.stage-wrapper {
+    position: relative;
+    background: var(--brand-white);
+    border: 3px solid var(--brand-black);
+    box-shadow: 8px 8px 0px var(--brand-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#paintCanvas {
+    display: block;
+    cursor: crosshair;
+    background: transparent;
+}
+
+/* Top Floating Canvas Controls */
+.stage-floating-bar {
+    position: absolute;
+    top: 20px;
+    background: var(--brand-black);
+    color: var(--brand-white);
+    padding: 8px 16px;
+    border: 2px solid var(--brand-yellow);
+    box-shadow: var(--box-shadow-sharp);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-item label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--brand-yellow);
+    text-transform: uppercase;
+}
+
+.color-swatch-picker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.color-dot {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--brand-white);
+    cursor: pointer;
+}
+
+.color-dot.active {
+    border-color: var(--brand-yellow);
+    transform: scale(1.15);
+}
+
+#colorPicker {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--brand-yellow);
+    background: none;
+    cursor: pointer;
+}
+
+.slider-input {
+    accent-color: var(--brand-yellow);
+    cursor: pointer;
+}
+
+.val-badge {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 2px 6px;
+}
+
+/* Layers & Properties Panel */
+.layers-panel {
+    width: 240px;
+    background: var(--brand-white);
+    border-left: 3px solid var(--brand-black);
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    background: var(--brand-black);
+    color: var(--brand-white);
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--brand-yellow);
+}
+
+.panel-btn {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    border: 1px solid var(--brand-black);
+    font-weight: 900;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    cursor: pointer;
+}
+
+.layers-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.layer-item {
+    background: var(--brand-gray-light);
+    border: 2px solid var(--brand-black);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.layer-item.active {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    box-shadow: 2px 2px 0px var(--brand-black);
+}
+
+.layer-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.icon-btn-small {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* Bottom Animation Timeline Bar */
+.timeline-bar {
+    height: 84px;
+    background: var(--brand-black);
+    border-top: 3px solid var(--brand-yellow);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 16px;
+}
+
+.timeline-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-yellow {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    border: 2px solid var(--brand-black);
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 2px 2px 0px var(--brand-white);
+    transition: all 0.1s ease;
+}
+
+.btn-yellow:hover {
+    background: var(--brand-yellow-hover);
+    transform: translateY(-1px);
+}
+
+.btn-black {
+    background: var(--brand-black);
+    color: var(--brand-white);
+    border: 2px solid var(--brand-yellow);
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    display: inline-flex;
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
     align-items: center;
     gap: 6px;
 }
 
+<<<<<<< HEAD
 .swatch {
     width: 24px;
     height: 24px;
@@ -290,11 +669,81 @@ canvas:focus-visible {
 
 .brush-header {
     width: 100%;
+=======
+.btn-black:hover {
+    background: var(--brand-gray-dark);
+}
+
+.frames-timeline {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 0;
+}
+
+.frame-thumb {
+    width: 52px;
+    height: 52px;
+    background: var(--brand-white);
+    border: 2px solid var(--brand-gray-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--brand-black);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.frame-thumb.active {
+    border: 3px solid var(--brand-yellow);
+    box-shadow: 0 0 0 2px var(--brand-black);
+}
+
+.fps-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--brand-yellow);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+/* CLI Drawer Modal */
+.cli-drawer {
+    position: fixed;
+    bottom: 84px;
+    right: 20px;
+    width: 380px;
+    background: var(--brand-black);
+    border: 3px solid var(--brand-yellow);
+    box-shadow: var(--box-shadow-sharp);
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.cli-drawer.open {
+    display: flex;
+}
+
+.cli-header {
+    background: var(--brand-yellow);
+    color: var(--brand-black);
+    padding: 6px 12px;
+    font-weight: 900;
+    font-size: 0.8rem;
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+<<<<<<< HEAD
 .size-badge {
     font-size: 0.75rem;
     font-weight: 700;
@@ -436,4 +885,37 @@ input[type="range"]:focus-visible {
     .toolbar-divider {
         display: none;
     }
+=======
+.cli-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cli-output {
+    height: 120px;
+    background: #000;
+    color: #00FF66;
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 8px;
+    overflow-y: auto;
+    border: 1px solid var(--brand-gray-dark);
+}
+
+.cli-input {
+    background: #000;
+    color: var(--brand-yellow);
+    border: 1px solid var(--brand-yellow);
+    padding: 6px;
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+
+/* Focus styles */
+button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--brand-yellow);
+    outline-offset: 2px;
+>>>>>>> c75f789 (Palette: High contrast black and yellow studio redesign with multi-layer, animation timeline, and AI CLI engine)
 }
