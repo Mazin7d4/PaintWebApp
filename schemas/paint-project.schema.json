@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mazin7d4.github.io/PaintWebApp/schemas/paint-project.schema.json",
+  "title": "PaintStudioProject",
+  "description": "Paint Studio v2 project file — agent-friendly animation document. Canonical copy also ships in @paint-studio/core.",
+  "type": "object",
+  "required": ["version", "name", "width", "height", "fps", "background", "palette", "layers", "frames"],
+  "properties": {
+    "version": { "const": 2 },
+    "name": { "type": "string" },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "fps": { "type": "number", "minimum": 1, "maximum": 120 },
+    "background": { "type": "string" },
+    "style": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "enum": ["flat-vector", "inked-cartoon", "pixel-art", "painterly", "neon"]
+        }
+      }
+    },
+    "palette": { "type": "array" },
+    "layers": { "type": "array", "minItems": 1 },
+    "frames": { "type": "array", "minItems": 1 },
+    "camera": { "type": "object" },
+    "cameraKeyframes": { "type": "array" },
+    "meta": { "type": "object" }
+  }
+}

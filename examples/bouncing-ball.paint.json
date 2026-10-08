@@ -1,0 +1,111 @@
+{
+  "version": 2,
+  "name": "Bouncing Ball — Squash & Stretch",
+  "width": 640,
+  "height": 360,
+  "fps": 24,
+  "background": "#FAD400",
+  "style": { "id": "flat-vector" },
+  "palette": [
+    { "id": "sun", "hex": "#FAD400", "name": "Yellow" },
+    { "id": "ink", "hex": "#1A1A1A", "name": "Ink" },
+    { "id": "white", "hex": "#FFFFFF", "name": "White" }
+  ],
+  "camera": { "x": 0, "y": 0, "zoom": 1 },
+  "layers": [
+    {
+      "id": "ground",
+      "name": "Ground",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "source-over",
+      "objects": [
+        {
+          "type": "shape",
+          "id": "floor",
+          "shape": "rect",
+          "x": 40,
+          "y": 300,
+          "w": 560,
+          "h": 16,
+          "cornerRadius": 4,
+          "fill": { "color": "#1A1A1A" }
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "text": "SQUASH & STRETCH",
+          "x": 320,
+          "y": 48,
+          "fontSize": 28,
+          "fontWeight": 900,
+          "align": "center",
+          "fill": { "color": "#1A1A1A" }
+        }
+      ]
+    },
+    {
+      "id": "ball-layer",
+      "name": "Ball",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "source-over",
+      "objects": [
+        {
+          "type": "shape",
+          "id": "ball",
+          "shape": "ellipse",
+          "x": -40,
+          "y": -40,
+          "w": 80,
+          "h": 80,
+          "fill": { "color": "#1A1A1A" },
+          "shadow": { "color": "rgba(0,0,0,0.25)", "blur": 12, "offsetX": 0, "offsetY": 8 },
+          "transform": { "x": 320, "y": 80 },
+          "keyframes": [
+            { "t": 0, "transform": { "x": 320, "y": 90, "scaleX": 0.85, "scaleY": 1.2 }, "easing": "easeInCubic" },
+            { "t": 280, "transform": { "x": 320, "y": 260, "scaleX": 1.05, "scaleY": 0.95 }, "easing": "linear" },
+            { "t": 320, "transform": { "x": 320, "y": 278, "scaleX": 1.45, "scaleY": 0.55 }, "easing": "easeOutCubic" },
+            { "t": 380, "transform": { "x": 320, "y": 250, "scaleX": 0.8, "scaleY": 1.25 }, "easing": "easeOutCubic" },
+            { "t": 700, "transform": { "x": 320, "y": 100, "scaleX": 0.9, "scaleY": 1.15 }, "easing": "easeInCubic" },
+            { "t": 1000, "transform": { "x": 320, "y": 260, "scaleX": 1.05, "scaleY": 0.95 }, "easing": "linear" },
+            { "t": 1040, "transform": { "x": 320, "y": 278, "scaleX": 1.4, "scaleY": 0.58 }, "easing": "easeOutCubic" },
+            { "t": 1120, "transform": { "x": 320, "y": 240, "scaleX": 0.85, "scaleY": 1.2 }, "easing": "easeOutCubic" },
+            { "t": 1500, "transform": { "x": 320, "y": 120, "scaleX": 0.95, "scaleY": 1.08 }, "easing": "easeInOutCubic" },
+            { "t": 1800, "transform": { "x": 320, "y": 90, "scaleX": 0.85, "scaleY": 1.2 }, "easing": "easeOutCubic" }
+          ]
+        },
+        {
+          "type": "shape",
+          "id": "ball-hi",
+          "shape": "ellipse",
+          "x": -14,
+          "y": -18,
+          "w": 22,
+          "h": 14,
+          "fill": { "color": "#FAD400", "opacity": 0.9 },
+          "transform": { "x": 320, "y": 80 },
+          "keyframes": [
+            { "t": 0, "transform": { "x": 308, "y": 72 }, "easing": "easeInCubic" },
+            { "t": 280, "transform": { "x": 308, "y": 242 }, "easing": "linear" },
+            { "t": 320, "transform": { "x": 308, "y": 268 }, "easing": "easeOutCubic" },
+            { "t": 380, "transform": { "x": 308, "y": 232 }, "easing": "easeOutCubic" },
+            { "t": 700, "transform": { "x": 308, "y": 82 }, "easing": "easeInCubic" },
+            { "t": 1000, "transform": { "x": 308, "y": 242 }, "easing": "linear" },
+            { "t": 1040, "transform": { "x": 308, "y": 268 }, "easing": "easeOutCubic" },
+            { "t": 1120, "transform": { "x": 308, "y": 222 }, "easing": "easeOutCubic" },
+            { "t": 1500, "transform": { "x": 308, "y": 102 }, "easing": "easeInOutCubic" },
+            { "t": 1800, "transform": { "x": 308, "y": 72 }, "easing": "easeOutCubic" }
+          ]
+        }
+      ]
+    }
+  ],
+  "frames": [
+    { "id": "f1", "name": "Loop", "duration": 1800 }
+  ],
+  "meta": {
+    "description": "Classic squash-and-stretch bouncing ball — authored as keyframed ellipses for agents.",
+    "tags": ["example", "squash", "stretch", "cli"]
+  }
+}

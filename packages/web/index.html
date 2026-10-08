@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paint Studio Pro — Animation Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <header class="studio-header">
+    <div class="brand-block">
+      <span class="logo-yellow-box">GOOD</span>
+      <span class="brand-title">PAINT STUDIO</span>
+      <span class="brand-tag">PRO v2</span>
+    </div>
+    <div class="header-actions">
+      <label class="file-btn">
+        Open
+        <input type="file" id="openFile" accept="application/json,.json,.paint.json" hidden />
+      </label>
+      <button type="button" id="saveProjectBtn" class="btn-black">Save JSON</button>
+      <button type="button" id="exportPngBtn" class="btn-yellow">Export PNG</button>
+      <select id="styleSelect" class="select-input" aria-label="Style preset"></select>
+    </div>
+  </header>
+
+  <div class="studio-body">
+    <aside class="tools-sidebar" role="toolbar" aria-label="Tools">
+      <button class="tool-btn active" data-tool="pen" title="Pen (P)">✎</button>
+      <button class="tool-btn" data-tool="eraser" title="Eraser (E)">⌫</button>
+      <button class="tool-btn" data-tool="line" title="Line (L)">／</button>
+      <button class="tool-btn" data-tool="rect" title="Rect (R)">▢</button>
+      <button class="tool-btn" data-tool="ellipse" title="Ellipse (O)">◯</button>
+      <button class="tool-btn" data-tool="fill" title="Fill (G)">🪣</button>
+      <button class="tool-btn" data-tool="eyedropper" title="Eyedropper (I)">🖌</button>
+      <div class="sidebar-divider"></div>
+      <button class="tool-btn" id="undoBtn" title="Undo (Z)">↶</button>
+      <button class="tool-btn" id="redoBtn" title="Redo (Y)">↷</button>
+      <button class="tool-btn" id="clearBtn" title="Clear layer">🗑</button>
+    </aside>
+
+    <main class="canvas-stage">
+      <div class="stage-floating-bar">
+        <div class="control-item">
+          <label>Brush</label>
+          <select id="brushKind" class="select-input compact">
+            <option value="ink">Ink</option>
+            <option value="pencil">Pencil</option>
+            <option value="marker">Marker</option>
+            <option value="airbrush">Airbrush</option>
+            <option value="charcoal">Charcoal</option>
+            <option value="neon">Neon</option>
+            <option value="watercolor">Watercolor</option>
+          </select>
+        </div>
+        <div class="control-item">
+          <label>Color</label>
+          <div class="color-swatch-picker" id="paletteDots"></div>
+          <input type="color" id="colorPicker" value="#1A1A1A" aria-label="Color" />
+        </div>
+        <div class="control-item">
+          <label>Size</label>
+          <input type="range" id="brushSize" min="1" max="64" value="10" />
+          <span id="brushSizeDisplay" class="val-badge">10px</span>
+        </div>
+        <div class="control-item">
+          <label>Onion</label>
+          <input type="checkbox" id="onionToggle" checked />
+        </div>
+        <div class="control-item">
+          <label>Grid</label>
+          <input type="checkbox" id="gridToggle" />
+        </div>
+        <div class="control-item">
+          <label>Zoom</label>
+          <input type="range" id="zoomRange" min="25" max="300" value="100" />
+          <span id="zoomDisplay" class="val-badge">100%</span>
+        </div>
+      </div>
+
+      <div class="stage-wrapper" id="stageWrapper">
+        <canvas id="paintCanvas" aria-label="Canvas"></canvas>
+        <div id="resizeHandle" title="Resize canvas" aria-label="Resize canvas">↘</div>
+      </div>
+    </main>
+
+    <aside class="layers-panel" aria-label="Layers">
+      <div class="panel-header">
+        <span>LAYERS</span>
+        <button type="button" id="addLayerBtn" class="panel-btn">+ ADD</button>
+      </div>
+      <div class="layers-list" id="layersList"></div>
+    </aside>
+  </div>
+
+  <footer class="timeline-bar" aria-label="Timeline">
+    <div class="timeline-controls">
+      <button type="button" id="playBtn" class="btn-yellow">▶ PLAY</button>
+      <button type="button" id="addFrameBtn" class="btn-black">+ FRAME</button>
+      <button type="button" id="dupFrameBtn" class="btn-black">DUP</button>
+      <button type="button" id="deleteFrameBtn" class="btn-black">DEL</button>
+    </div>
+    <div class="frames-timeline" id="framesTimeline"></div>
+    <div class="fps-control">
+      <label for="fpsInput">FPS</label>
+      <input type="number" id="fpsInput" class="select-input" value="12" min="1" max="60" />
+      <label for="loopMode">Loop</label>
+      <select id="loopMode" class="select-input compact">
+        <option value="loop">Loop</option>
+        <option value="once">Once</option>
+      </select>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

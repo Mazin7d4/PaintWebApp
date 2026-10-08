@@ -1,0 +1,20 @@
+node_modules/
+dist/
+build/
+coverage/
+.DS_Store
+*.log
+.env
+.env.*
+# Keep rendered example GIFs tracked for README; ignore other render dumps
+examples/out/*
+!examples/out/*.gif
+
+packages/web/dist/
+packages/cli/dist/
+packages/core/dist/
+test-results/
+playwright-report/
+.vite/
+*.tsbuildinfo
+.turbo/

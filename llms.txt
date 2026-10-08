@@ -1,0 +1,29 @@
+# Paint Studio
+
+> Agent-friendly animation studio with a shared TypeScript core, CLI renderer (PNG/GIF), and black/yellow browser editor.
+
+## Links
+
+- Repo: https://github.com/Mazin7d4/PaintWebApp
+- Live demo: https://mazin7d4.github.io/PaintWebApp/
+- Agent guide: AGENTS.md
+- Schema: schemas/paint-project.schema.json
+- Examples: examples/*.paint.json
+
+## CLI
+
+```
+npx paint-studio create project.paint.json --style neon
+npx paint-studio check project.paint.json
+npx paint-studio render project.paint.json -o out.gif
+npx paint-studio render project.paint.json -o frames --format png-sequence
+npx paint-studio export-hyperframes project.paint.json -o composition.html
+```
+
+## Style presets
+
+flat-vector | inked-cartoon | pixel-art | painterly | neon
+
+## Object types
+
+stroke (brush + pressure points, writeOnMs) | shape | text | particles
