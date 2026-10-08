@@ -5,18 +5,54 @@
   "height": 360,
   "fps": 20,
   "background": "#050505",
-  "style": { "id": "neon" },
+  "style": {
+    "id": "neon"
+  },
   "palette": [
-    { "id": "void", "hex": "#050505" },
-    { "id": "sun", "hex": "#FAD400" },
-    { "id": "magenta", "hex": "#FF2BD6" },
-    { "id": "cyan", "hex": "#00F0FF" }
+    {
+      "id": "void",
+      "hex": "#050505"
+    },
+    {
+      "id": "sun",
+      "hex": "#FAD400"
+    },
+    {
+      "id": "magenta",
+      "hex": "#FF2BD6"
+    },
+    {
+      "id": "cyan",
+      "hex": "#00F0FF"
+    }
   ],
-  "camera": { "x": 0, "y": 0, "zoom": 1 },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
   "cameraKeyframes": [
-    { "t": 0, "camera": { "zoom": 1 }, "easing": "easeInOutCubic" },
-    { "t": 800, "camera": { "zoom": 1.08 }, "easing": "easeInOutCubic" },
-    { "t": 1600, "camera": { "zoom": 1 }, "easing": "easeInOutCubic" }
+    {
+      "t": 0,
+      "camera": {
+        "zoom": 1
+      },
+      "easing": "easeInOutCubic"
+    },
+    {
+      "t": 800,
+      "camera": {
+        "zoom": 1.08
+      },
+      "easing": "easeInOutCubic"
+    },
+    {
+      "t": 1600,
+      "camera": {
+        "zoom": 1
+      },
+      "easing": "easeInOutCubic"
+    }
   ],
   "layers": [
     {
@@ -71,12 +107,50 @@
           "y": 80,
           "w": 200,
           "h": 200,
-          "stroke": { "color": "#FAD400", "width": 6 },
-          "shadow": { "color": "#FAD400", "blur": 24, "offsetX": 0, "offsetY": 0 },
+          "stroke": {
+            "color": "#FAD400",
+            "width": 6
+          },
+          "shadow": {
+            "color": "#FAD400",
+            "blur": 24,
+            "offsetX": 0,
+            "offsetY": 0
+          },
           "keyframes": [
-            { "t": 0, "transform": { "scaleX": 0.7, "scaleY": 0.7, "opacity": 0.4, "x": 0, "y": 0 }, "easing": "easeOutCubic" },
-            { "t": 800, "transform": { "scaleX": 1.15, "scaleY": 1.15, "opacity": 1, "x": 0, "y": 0 }, "easing": "easeInOutCubic" },
-            { "t": 1600, "transform": { "scaleX": 0.7, "scaleY": 0.7, "opacity": 0.4, "x": 0, "y": 0 }, "easing": "easeInOutCubic" }
+            {
+              "t": 0,
+              "transform": {
+                "scaleX": 0.95,
+                "scaleY": 0.95,
+                "opacity": 0.85,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeOutCubic"
+            },
+            {
+              "t": 800,
+              "transform": {
+                "scaleX": 1.15,
+                "scaleY": 1.15,
+                "opacity": 1,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeInOutCubic"
+            },
+            {
+              "t": 1600,
+              "transform": {
+                "scaleX": 0.95,
+                "scaleY": 0.95,
+                "opacity": 0.85,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeInOutCubic"
+            }
           ]
         },
         {
@@ -92,13 +166,33 @@
             "taper": 0.4,
             "softness": 0.85
           },
-          "writeOnMs": 900,
+          "writeOnMs": 600,
           "points": [
-            { "x": 180, "y": 220, "p": 0.2 },
-            { "x": 240, "y": 120, "p": 0.9 },
-            { "x": 320, "y": 90, "p": 1 },
-            { "x": 400, "y": 120, "p": 0.9 },
-            { "x": 460, "y": 220, "p": 0.25 }
+            {
+              "x": 180,
+              "y": 220,
+              "p": 0.2
+            },
+            {
+              "x": 240,
+              "y": 120,
+              "p": 0.9
+            },
+            {
+              "x": 320,
+              "y": 90,
+              "p": 1
+            },
+            {
+              "x": 400,
+              "y": 120,
+              "p": 0.9
+            },
+            {
+              "x": 460,
+              "y": 220,
+              "p": 0.25
+            }
           ]
         },
         {
@@ -110,20 +204,60 @@
           "fontSize": 64,
           "fontWeight": 900,
           "align": "center",
-          "fill": { "color": "#FFFFFF" },
-          "shadow": { "color": "#00F0FF", "blur": 18, "offsetX": 0, "offsetY": 0 },
+          "fill": {
+            "color": "#FFFFFF"
+          },
+          "shadow": {
+            "color": "#00F0FF",
+            "blur": 18,
+            "offsetX": 0,
+            "offsetY": 0
+          },
           "keyframes": [
-            { "t": 0, "transform": { "opacity": 0, "scaleX": 0.8, "scaleY": 0.8 }, "easing": "easeOutBack" },
-            { "t": 500, "transform": { "opacity": 1, "scaleX": 1, "scaleY": 1 }, "easing": "easeOutBack" },
-            { "t": 1600, "transform": { "opacity": 1, "scaleX": 1, "scaleY": 1 } }
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 0.85,
+                "scaleX": 1,
+                "scaleY": 1
+              },
+              "easing": "easeOutBack"
+            },
+            {
+              "t": 400,
+              "transform": {
+                "opacity": 1,
+                "scaleX": 1.05,
+                "scaleY": 1.05
+              },
+              "easing": "easeOutBack"
+            },
+            {
+              "t": 1600,
+              "transform": {
+                "opacity": 1,
+                "scaleX": 1,
+                "scaleY": 1
+              }
+            }
           ]
         }
       ]
     }
   ],
-  "frames": [{ "id": "f1", "duration": 1600, "name": "Pulse" }],
+  "frames": [
+    {
+      "id": "f1",
+      "duration": 1600,
+      "name": "Pulse"
+    }
+  ],
   "meta": {
-    "description": "Neon glow ring with particles and write-on stroke — style preset: neon.",
-    "tags": ["example", "neon", "particles"]
+    "description": "Neon glow ring with particles and write-on stroke \u2014 style preset: neon.",
+    "tags": [
+      "example",
+      "neon",
+      "particles"
+    ]
   }
 }

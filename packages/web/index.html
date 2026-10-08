@@ -17,6 +17,10 @@
       <span class="brand-tag">PRO v2</span>
     </div>
     <div class="header-actions">
+      <form id="aiPromptForm" class="ai-prompt-form" title="Optional prompt → editable animation (no API key needed for template mode)">
+        <input type="text" id="aiPrompt" class="select-input" placeholder="AI: bouncing ball in ink…" aria-label="Prompt to animation" />
+        <button type="submit" class="btn-yellow">Generate</button>
+      </form>
       <label class="file-btn">
         Open
         <input type="file" id="openFile" accept="application/json,.json,.paint.json" hidden />

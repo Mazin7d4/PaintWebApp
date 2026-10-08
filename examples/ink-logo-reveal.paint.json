@@ -5,14 +5,32 @@
   "height": 404,
   "fps": 24,
   "background": "#F7F1E3",
-  "style": { "id": "inked-cartoon" },
+  "style": {
+    "id": "inked-cartoon"
+  },
   "palette": [
-    { "id": "ink", "hex": "#1A1A1A" },
-    { "id": "sun", "hex": "#FAD400" },
-    { "id": "paper", "hex": "#F7F1E3" },
-    { "id": "blush", "hex": "#E85D4C" }
+    {
+      "id": "ink",
+      "hex": "#1A1A1A"
+    },
+    {
+      "id": "sun",
+      "hex": "#FAD400"
+    },
+    {
+      "id": "paper",
+      "hex": "#F7F1E3"
+    },
+    {
+      "id": "blush",
+      "hex": "#E85D4C"
+    }
   ],
-  "camera": { "x": 0, "y": 0, "zoom": 1 },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
   "layers": [
     {
       "id": "bg",
@@ -30,11 +48,28 @@
           "w": 120,
           "h": 48,
           "cornerRadius": 0,
-          "fill": { "color": "#FAD400" },
-          "stroke": { "color": "#1A1A1A", "width": 4 },
+          "fill": {
+            "color": "#FAD400"
+          },
+          "stroke": {
+            "color": "#1A1A1A",
+            "width": 4
+          },
           "keyframes": [
-            { "t": 0, "transform": { "x": -40, "opacity": 0 }, "easing": "easeOutBack" },
-            { "t": 350, "transform": { "x": 0, "opacity": 1 }, "easing": "easeOutBack" }
+            {
+              "t": 0,
+              "transform": {
+                "x": 0,
+                "opacity": 1
+              }
+            },
+            {
+              "t": 1800,
+              "transform": {
+                "x": 0,
+                "opacity": 1
+              }
+            }
           ]
         },
         {
@@ -46,10 +81,22 @@
           "fontSize": 22,
           "fontWeight": 900,
           "align": "center",
-          "fill": { "color": "#1A1A1A" },
+          "fill": {
+            "color": "#1A1A1A"
+          },
           "keyframes": [
-            { "t": 0, "transform": { "opacity": 0 }, "easing": "easeOutCubic" },
-            { "t": 400, "transform": { "opacity": 1 }, "easing": "easeOutCubic" }
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 1
+              }
+            },
+            {
+              "t": 1800,
+              "transform": {
+                "opacity": 1
+              }
+            }
           ]
         }
       ]
@@ -64,7 +111,6 @@
         {
           "type": "stroke",
           "id": "P-bowl",
-          "writeOnMs": 700,
           "brush": {
             "kind": "ink",
             "size": 16,
@@ -75,20 +121,53 @@
             "taper": 0.35
           },
           "points": [
-            { "x": 210, "y": 280, "p": 0.2 },
-            { "x": 210, "y": 160, "p": 0.9 },
-            { "x": 210, "y": 120, "p": 1 },
-            { "x": 250, "y": 110, "p": 0.95 },
-            { "x": 300, "y": 130, "p": 0.9 },
-            { "x": 310, "y": 170, "p": 0.85 },
-            { "x": 280, "y": 200, "p": 0.8 },
-            { "x": 210, "y": 205, "p": 0.4 }
-          ]
+            {
+              "x": 210,
+              "y": 280,
+              "p": 0.2
+            },
+            {
+              "x": 210,
+              "y": 160,
+              "p": 0.9
+            },
+            {
+              "x": 210,
+              "y": 120,
+              "p": 1
+            },
+            {
+              "x": 250,
+              "y": 110,
+              "p": 0.95
+            },
+            {
+              "x": 300,
+              "y": 130,
+              "p": 0.9
+            },
+            {
+              "x": 310,
+              "y": 170,
+              "p": 0.85
+            },
+            {
+              "x": 280,
+              "y": 200,
+              "p": 0.8
+            },
+            {
+              "x": 210,
+              "y": 205,
+              "p": 0.4
+            }
+          ],
+          "reveal": 1
         },
         {
           "type": "stroke",
           "id": "S-curve",
-          "writeOnMs": 900,
+          "writeOnMs": 700,
           "brush": {
             "kind": "ink",
             "size": 14,
@@ -99,26 +178,63 @@
             "taper": 0.4
           },
           "points": [
-            { "x": 360, "y": 130, "p": 0.25 },
-            { "x": 420, "y": 110, "p": 0.85 },
-            { "x": 470, "y": 140, "p": 0.9 },
-            { "x": 450, "y": 190, "p": 1 },
-            { "x": 390, "y": 210, "p": 0.9 },
-            { "x": 360, "y": 250, "p": 0.85 },
-            { "x": 400, "y": 290, "p": 0.7 },
-            { "x": 470, "y": 280, "p": 0.3 }
+            {
+              "x": 360,
+              "y": 130,
+              "p": 0.25
+            },
+            {
+              "x": 420,
+              "y": 110,
+              "p": 0.85
+            },
+            {
+              "x": 470,
+              "y": 140,
+              "p": 0.9
+            },
+            {
+              "x": 450,
+              "y": 190,
+              "p": 1
+            },
+            {
+              "x": 390,
+              "y": 210,
+              "p": 0.9
+            },
+            {
+              "x": 360,
+              "y": 250,
+              "p": 0.85
+            },
+            {
+              "x": 400,
+              "y": 290,
+              "p": 0.7
+            },
+            {
+              "x": 470,
+              "y": 280,
+              "p": 0.3
+            }
           ],
-          "transform": { "opacity": 1 },
+          "transform": {
+            "opacity": 1
+          },
           "keyframes": [
-            { "t": 0, "transform": { "opacity": 0 } },
-            { "t": 200, "transform": { "opacity": 0 } },
-            { "t": 260, "transform": { "opacity": 1 } }
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 1
+              }
+            }
           ]
         },
         {
           "type": "stroke",
           "id": "underline",
-          "writeOnMs": 500,
+          "writeOnMs": 400,
           "brush": {
             "kind": "marker",
             "size": 18,
@@ -129,15 +245,46 @@
             "taper": 0.15
           },
           "points": [
-            { "x": 190, "y": 310, "p": 0.4 },
-            { "x": 300, "y": 318, "p": 1 },
-            { "x": 420, "y": 312, "p": 0.9 },
-            { "x": 520, "y": 308, "p": 0.35 }
+            {
+              "x": 190,
+              "y": 310,
+              "p": 0.4
+            },
+            {
+              "x": 300,
+              "y": 318,
+              "p": 1
+            },
+            {
+              "x": 420,
+              "y": 312,
+              "p": 0.9
+            },
+            {
+              "x": 520,
+              "y": 308,
+              "p": 0.35
+            }
           ],
           "keyframes": [
-            { "t": 0, "transform": { "opacity": 0 } },
-            { "t": 700, "transform": { "opacity": 0 } },
-            { "t": 760, "transform": { "opacity": 1 } }
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 0
+              }
+            },
+            {
+              "t": 450,
+              "transform": {
+                "opacity": 0
+              }
+            },
+            {
+              "t": 500,
+              "transform": {
+                "opacity": 1
+              }
+            }
           ]
         },
         {
@@ -149,19 +296,60 @@
           "fontSize": 22,
           "fontWeight": 800,
           "align": "center",
-          "fill": { "color": "#1A1A1A" },
+          "fill": {
+            "color": "#1A1A1A"
+          },
           "keyframes": [
-            { "t": 0, "transform": { "opacity": 0, "y": 12 }, "easing": "easeOutCubic" },
-            { "t": 1000, "transform": { "opacity": 0, "y": 12 }, "easing": "easeOutCubic" },
-            { "t": 1300, "transform": { "opacity": 1, "y": 0 }, "easing": "easeOutCubic" }
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 0,
+                "y": 8
+              },
+              "easing": "easeOutCubic"
+            },
+            {
+              "t": 700,
+              "transform": {
+                "opacity": 0,
+                "y": 8
+              },
+              "easing": "easeOutCubic"
+            },
+            {
+              "t": 950,
+              "transform": {
+                "opacity": 1,
+                "y": 0
+              },
+              "easing": "easeOutCubic"
+            },
+            {
+              "t": 2200,
+              "transform": {
+                "opacity": 1,
+                "y": 0
+              }
+            }
           ]
         }
       ]
     }
   ],
-  "frames": [{ "id": "f1", "duration": 1800, "name": "Reveal" }],
+  "frames": [
+    {
+      "id": "f1",
+      "duration": 2200,
+      "name": "Reveal"
+    }
+  ],
   "meta": {
     "description": "Inked cartoon logo reveal with tapered write-on strokes and yellow marker underline.",
-    "tags": ["example", "ink", "logo", "hero"]
+    "tags": [
+      "example",
+      "ink",
+      "logo",
+      "hero"
+    ]
   }
 }

@@ -6,6 +6,7 @@ import {
   createEmptyProject,
   drawStroke,
   duplicateFrame,
+  generateProjectFromPrompt,
   getStylePreset,
   renderProject,
   type BrushKind,
@@ -497,6 +498,23 @@ document.getElementById('exportPngBtn')!.addEventListener('click', () => {
   a.href = canvas.toDataURL('image/png');
   a.download = `${project().name.replace(/\s+/g, '-').toLowerCase()}.png`;
   a.click();
+});
+
+document.getElementById('aiPromptForm')!.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const input = document.getElementById('aiPrompt') as HTMLInputElement;
+  const prompt = input.value.trim();
+  if (!prompt) return;
+  const generated = await generateProjectFromPrompt({
+    prompt,
+    provider: 'template',
+    style: (styleSelect.value as StylePresetId) || undefined,
+  });
+  history = new HistoryStack(generated);
+  activeLayerIndex = 0;
+  currentFrameIndex = 0;
+  styleSelect.value = generated.style?.id ?? 'inked-cartoon';
+  refreshUi();
 });
 
 document.getElementById('openFile')!.addEventListener('change', async (e) => {

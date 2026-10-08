@@ -7,8 +7,10 @@ import {
   projectToHyperframesHtml,
   projectDurationMs,
   HYPERFRAMES_INTEROP,
+  generateProjectFromPrompt,
   type PaintProject,
   type StylePresetId,
+  type LlmProvider,
 } from '@paint-studio/core';
 import { renderGif, renderPngSequence, renderSpriteSheet, renderStill } from './render.js';
 
@@ -135,6 +137,32 @@ program
     console.log(`Wrote ${opts.out}`);
     console.log('Interop notes:');
     for (const a of HYPERFRAMES_INTEROP.adopted) console.log(`  + ${a}`);
+  });
+
+program
+  .command('generate')
+  .description('Generate a .paint.json animation from a text prompt (LLM-agnostic; template provider needs no key)')
+  .argument('<prompt>', 'natural language prompt')
+  .option('-o, --out <file>', 'output project', 'generated.paint.json')
+  .option('-s, --style <preset>', 'style preset override')
+  .option('--provider <name>', 'template | openai | anthropic | ollama', 'template')
+  .option('--api-key <key>', 'API key (or use OPENAI_API_KEY / ANTHROPIC_API_KEY)')
+  .option('--base-url <url>', 'OpenAI-compatible or Ollama base URL')
+  .option('--model <model>', 'model id')
+  .action(async (prompt: string, opts) => {
+    const project = await generateProjectFromPrompt({
+      prompt,
+      style: opts.style as StylePresetId | undefined,
+      provider: opts.provider as LlmProvider,
+      apiKey: opts.apiKey,
+      baseUrl: opts.baseUrl,
+      model: opts.model,
+    });
+    const result = validateProject(project);
+    if (!result.ok) throw new Error(result.errors.map((e) => e.message).join('; '));
+    await mkdir(path.dirname(path.resolve(opts.out)), { recursive: true });
+    await writeFile(opts.out, JSON.stringify(project, null, 2) + '\n');
+    console.log(`Wrote ${opts.out} (style=${project.style?.id}, provider=${opts.provider})`);
   });
 
 program.parseAsync(process.argv).catch((err: unknown) => {

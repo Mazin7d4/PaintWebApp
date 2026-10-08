@@ -9,3 +9,4 @@ export * from './validate.js';
 export * from './renderer.js';
 export * from './history.js';
 export * from './hyperframes.js';
+export * from './generate.js';

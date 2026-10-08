@@ -4,8 +4,10 @@
 
 <h1 align="center">Paint Studio</h1>
 
+<p align="center"><b>Animate with any LLM.</b></p>
+
 <p align="center">
-  <b>Agent-friendly animation studio.</b> Author <code>.paint.json</code> projects, render GIF/PNG from the CLI, or draw in a bold black &amp; yellow editor — same TypeScript core everywhere.
+  Open-source animation studio for humans and coding agents. Author <code>.paint.json</code>, render GIF/PNG headlessly, drive it via CLI / MCP / JS API — same TypeScript core everywhere. Bold black &amp; yellow editor included.
 </p>
 
 <p align="center">
@@ -30,26 +32,39 @@ Coding agents should be able to **produce real animations** — not just screens
 3. A **shared renderer** so the editor preview matches the CLI output
 4. **Style presets + brush engine** so results look intentional (ink, neon, pixel, painterly…)
 
-## Quick start
+## Quick start (one build)
 
 ```bash
-npm install
-npm run build
+npm install && npm run build
 
-# Validate & render an example (no browser)
-npx paint-studio check examples/bouncing-ball.paint.json
-npx paint-studio render examples/ink-logo-reveal.paint.json -o examples/out/ink-logo-reveal.gif
-npx paint-studio render examples/neon-pulse.paint.json -o examples/out/neon-pulse.gif
+# Prompt → animation → GIF (no API key; template provider)
+node packages/cli/dist/bin.js generate "neon logo pulse" -o shot.paint.json
+node packages/cli/dist/bin.js check shot.paint.json
+node packages/cli/dist/bin.js render shot.paint.json -o shot.gif
 
 # Editor
 npm run dev
 ```
 
-Or with the published-style bin after build:
+### Copy-paste prompts for your LLM
+
+```
+Using Paint Studio, create examples/fox-run.paint.json in inked-cartoon style:
+a simple running cycle hint with squash/stretch on a character blob,
+then run: node packages/cli/dist/bin.js check ... && node packages/cli/dist/bin.js render ... -o fox.gif
+```
+
+```
+npx paint-studio generate "bouncing ball squash and stretch" -o ball.paint.json --provider template
+npx paint-studio render ball.paint.json -o ball.gif
+```
+
+Bring-your-own-key (OpenAI-compatible, Anthropic, or Ollama):
 
 ```bash
-node packages/cli/dist/bin.js create my-shot.paint.json --style neon --fps 24
-node packages/cli/dist/bin.js render my-shot.paint.json -o my-shot.gif
+node packages/cli/dist/bin.js generate "a fox running through snow, inked style" \
+  -o fox.paint.json --provider openai --model gpt-4o-mini
+# uses OPENAI_API_KEY — never commit keys
 ```
 
 ## Example gallery (CLI-authored)
@@ -69,9 +84,17 @@ node packages/cli/dist/bin.js render my-shot.paint.json -o my-shot.gif
 
 | Package | Role |
 |---------|------|
-| `@paint-studio/core` | Project model, brushes, tweening, validator, renderer |
-| `paint-studio` | CLI — create / check / render / export-hyperframes |
-| `@paint-studio/web` | Vite editor (black/yellow), `window.paintStudio` API |
+| `@paint-studio/core` | Project model, brushes, tweening, validator, renderer, prompt→project |
+| `paint-studio` | CLI — create / check / generate / render / export-hyperframes |
+| `@paint-studio/mcp-server` | MCP server for Claude / Cursor / Codex / etc. |
+| `@paint-studio/web` | Vite editor (black/yellow), prompt box, `window.paintStudio` API |
+
+### MCP
+
+```bash
+node packages/mcp-server/dist/server.js
+# Tools: paint_create_project, paint_check_project, paint_generate_animation, paint_render
+```
 
 ## Editor features (v2)
 

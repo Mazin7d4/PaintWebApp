@@ -53,6 +53,8 @@ body {
 }
 
 .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ai-prompt-form { display: flex; gap: 6px; align-items: center; }
+.ai-prompt-form input { min-width: 180px; max-width: 280px; }
 
 .btn-yellow, .btn-black, .file-btn, .panel-btn {
   font-family: inherit;

@@ -7,13 +7,26 @@ Live demo: https://mazin7d4.github.io/PaintWebApp/
 ## Quick agent loop (Hyperframes-inspired)
 
 ```bash
-npx paint-studio create shot.paint.json --name "Logo" --style inked-cartoon
-# edit the JSON (or generate it)
+npx paint-studio generate "ink logo reveal for Paint Studio" -o shot.paint.json --provider template
 npx paint-studio check shot.paint.json
 npx paint-studio render shot.paint.json -o shot.gif --format gif
 ```
 
-Commands: `create` · `check` · `info` · `render` · `export-hyperframes`
+Or hand-author JSON:
+
+```bash
+npx paint-studio create shot.paint.json --name "Logo" --style inked-cartoon
+npx paint-studio check shot.paint.json
+npx paint-studio render shot.paint.json -o shot.gif
+```
+
+Commands: `create` · `check` · `generate` · `info` · `render` · `export-hyperframes`
+
+### MCP tools
+
+`paint_create_project` · `paint_check_project` · `paint_generate_animation` · `paint_render`
+
+Run: `node packages/mcp-server/dist/server.js`
 
 ## Project format (v2)
 
