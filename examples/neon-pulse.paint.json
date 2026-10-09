@@ -1,0 +1,263 @@
+{
+  "version": 2,
+  "name": "Neon Pulse",
+  "width": 640,
+  "height": 360,
+  "fps": 20,
+  "background": "#050505",
+  "style": {
+    "id": "neon"
+  },
+  "palette": [
+    {
+      "id": "void",
+      "hex": "#050505"
+    },
+    {
+      "id": "sun",
+      "hex": "#FAD400"
+    },
+    {
+      "id": "magenta",
+      "hex": "#FF2BD6"
+    },
+    {
+      "id": "cyan",
+      "hex": "#00F0FF"
+    }
+  ],
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "cameraKeyframes": [
+    {
+      "t": 0,
+      "camera": {
+        "zoom": 1
+      },
+      "easing": "easeInOutCubic"
+    },
+    {
+      "t": 800,
+      "camera": {
+        "zoom": 1.08
+      },
+      "easing": "easeInOutCubic"
+    },
+    {
+      "t": 1600,
+      "camera": {
+        "zoom": 1
+      },
+      "easing": "easeInOutCubic"
+    }
+  ],
+  "layers": [
+    {
+      "id": "fx",
+      "name": "Particles",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "screen",
+      "objects": [
+        {
+          "type": "particles",
+          "id": "sparks",
+          "x": 320,
+          "y": 180,
+          "count": 48,
+          "life": 900,
+          "spread": 360,
+          "speed": 140,
+          "size": 3,
+          "color": "#FAD400",
+          "gravity": 40,
+          "seed": 42
+        },
+        {
+          "type": "particles",
+          "id": "sparks2",
+          "x": 320,
+          "y": 180,
+          "count": 28,
+          "life": 1100,
+          "spread": 360,
+          "speed": 90,
+          "size": 2,
+          "color": "#00F0FF",
+          "gravity": 20,
+          "seed": 7
+        }
+      ]
+    },
+    {
+      "id": "ring",
+      "name": "Ring",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "source-over",
+      "objects": [
+        {
+          "type": "shape",
+          "id": "halo",
+          "shape": "ellipse",
+          "x": 220,
+          "y": 80,
+          "w": 200,
+          "h": 200,
+          "stroke": {
+            "color": "#FAD400",
+            "width": 6
+          },
+          "shadow": {
+            "color": "#FAD400",
+            "blur": 24,
+            "offsetX": 0,
+            "offsetY": 0
+          },
+          "keyframes": [
+            {
+              "t": 0,
+              "transform": {
+                "scaleX": 0.95,
+                "scaleY": 0.95,
+                "opacity": 0.85,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeOutCubic"
+            },
+            {
+              "t": 800,
+              "transform": {
+                "scaleX": 1.15,
+                "scaleY": 1.15,
+                "opacity": 1,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeInOutCubic"
+            },
+            {
+              "t": 1600,
+              "transform": {
+                "scaleX": 0.95,
+                "scaleY": 0.95,
+                "opacity": 0.85,
+                "x": 0,
+                "y": 0
+              },
+              "easing": "easeInOutCubic"
+            }
+          ]
+        },
+        {
+          "type": "stroke",
+          "id": "neon-arc",
+          "brush": {
+            "kind": "neon",
+            "size": 14,
+            "color": "#FF2BD6",
+            "opacity": 0.95,
+            "pressureWidth": 0.5,
+            "smoothing": 2,
+            "taper": 0.4,
+            "softness": 0.85
+          },
+          "writeOnMs": 600,
+          "points": [
+            {
+              "x": 180,
+              "y": 220,
+              "p": 0.2
+            },
+            {
+              "x": 240,
+              "y": 120,
+              "p": 0.9
+            },
+            {
+              "x": 320,
+              "y": 90,
+              "p": 1
+            },
+            {
+              "x": 400,
+              "y": 120,
+              "p": 0.9
+            },
+            {
+              "x": 460,
+              "y": 220,
+              "p": 0.25
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "text": "NEON",
+          "x": 320,
+          "y": 195,
+          "fontSize": 64,
+          "fontWeight": 900,
+          "align": "center",
+          "fill": {
+            "color": "#FFFFFF"
+          },
+          "shadow": {
+            "color": "#00F0FF",
+            "blur": 18,
+            "offsetX": 0,
+            "offsetY": 0
+          },
+          "keyframes": [
+            {
+              "t": 0,
+              "transform": {
+                "opacity": 0.85,
+                "scaleX": 1,
+                "scaleY": 1
+              },
+              "easing": "easeOutBack"
+            },
+            {
+              "t": 400,
+              "transform": {
+                "opacity": 1,
+                "scaleX": 1.05,
+                "scaleY": 1.05
+              },
+              "easing": "easeOutBack"
+            },
+            {
+              "t": 1600,
+              "transform": {
+                "opacity": 1,
+                "scaleX": 1,
+                "scaleY": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "id": "f1",
+      "duration": 1600,
+      "name": "Pulse"
+    }
+  ],
+  "meta": {
+    "description": "Neon glow ring with particles and write-on stroke \u2014 style preset: neon.",
+    "tags": [
+      "example",
+      "neon",
+      "particles"
+    ]
+  }
+}

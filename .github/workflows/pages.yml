@@ -1,0 +1,51 @@
+name: Deploy GitHub Pages
+
+# Supersedes draft PRs #3/#4 (workflow-only). Builds the Vite editor and deploys packages/web/dist.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm install
+      - run: npm run build:core
+      - run: npm run build:web
+      - name: Stage Pages site
+        run: |
+          mkdir -p _site
+          cp -r packages/web/dist/* _site/
+          mkdir -p _site/schemas _site/examples
+          cp schemas/paint-project.schema.json _site/schemas/
+          cp examples/*.paint.json _site/examples/
+          if [ -d examples/out ]; then cp examples/out/*.gif _site/examples/ 2>/dev/null || true; fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

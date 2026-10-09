@@ -1,0 +1,5 @@
+Paint Studio is MIT-licensed.
+
+Optional Hyperframes interop: we do not vendor Hyperframes source.
+Hyperframes is Apache-2.0 — https://github.com/heygen-com/hyperframes
+When you use `paint-studio export-hyperframes` and then Hyperframes tooling, comply with Apache-2.0 for that dependency.

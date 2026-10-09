@@ -1,0 +1,32 @@
+{
+  "name": "paint-studio-monorepo",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Paint Studio — agent-friendly animation studio with shared core, CLI, and black/yellow editor",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @paint-studio/core && npm run build -w paint-studio && npm run build -w @paint-studio/mcp-server && npm run build -w @paint-studio/web",
+    "build:core": "npm run build -w @paint-studio/core",
+    "build:cli": "npm run build -w paint-studio",
+    "build:mcp": "npm run build -w @paint-studio/mcp-server",
+    "build:web": "npm run build -w @paint-studio/web",
+    "dev": "npm run dev -w @paint-studio/web",
+    "test": "npm run test -w @paint-studio/core",
+    "test:e2e": "npm run test:e2e -w @paint-studio/web",
+    "lint": "npm run lint -w @paint-studio/core && npm run lint -w paint-studio && npm run lint -w @paint-studio/web",
+    "typecheck": "npm run typecheck -w @paint-studio/core && npm run typecheck -w paint-studio && npm run typecheck -w @paint-studio/mcp-server && npm run typecheck -w @paint-studio/web",
+    "examples:render": "npm run build:core && npm run build:cli && node packages/cli/dist/bin.js render examples/bouncing-ball.paint.json -o examples/out/bouncing-ball.gif && node packages/cli/dist/bin.js render examples/ink-logo-reveal.paint.json -o examples/out/ink-logo-reveal.gif && node packages/cli/dist/bin.js render examples/neon-pulse.paint.json -o examples/out/neon-pulse.gif",
+    "check": "npm run typecheck && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mazin7d4/PaintWebApp.git"
+  }
+}
