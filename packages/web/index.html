@@ -3,121 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paint Studio Pro — Animation Engine</title>
+  <title>Paint Studio — Animate with any LLM</title>
+  <meta name="description" content="Open-source animation studio for humans and coding agents. Pro canvas transforms, keyframes, brushes, GIF/WebM export, CLI and MCP." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/styles.css" />
 </head>
 <body>
-  <header class="studio-header">
-    <div class="brand-block">
-      <span class="logo-yellow-box">GOOD</span>
-      <span class="brand-title">PAINT STUDIO</span>
-      <span class="brand-tag">PRO v2</span>
-    </div>
-    <div class="header-actions">
-      <form id="aiPromptForm" class="ai-prompt-form" title="Optional prompt → editable animation (no API key needed for template mode)">
-        <input type="text" id="aiPrompt" class="select-input" placeholder="AI: bouncing ball in ink…" aria-label="Prompt to animation" />
-        <button type="submit" class="btn-yellow">Generate</button>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">PS</span><span class="brand-name">PAINT STUDIO</span><span class="brand-tag">v2.1</span></div>
+      <nav class="menu" aria-label="File">
+        <button type="button" class="tb-btn" id="newBtn" title="New project">New</button>
+        <label class="tb-btn" title="Open .paint.json (Ctrl+O)">Open<input type="file" id="openFile" accept="application/json,.json,.paint.json" hidden /></label>
+        <button type="button" class="tb-btn" id="saveBtn" title="Save .paint.json (Ctrl+S)">Save</button>
+        <button type="button" class="tb-btn accent" id="exportBtn" title="Export GIF / WebM / PNG (Ctrl+E)">Export</button>
+      </nav>
+      <div class="tb-sep"></div>
+      <button type="button" class="tb-icon" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+      <button type="button" class="tb-icon" id="redoBtn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+      <form id="aiPromptForm" class="ai-form" title="Prompt → editable animation (template mode needs no key)">
+        <span class="ai-badge">AI</span>
+        <input type="text" id="aiPrompt" placeholder="bouncing ball in ink…" aria-label="Prompt to animation" />
+        <button type="submit" class="tb-btn accent">Generate</button>
       </form>
-      <label class="file-btn">
-        Open
-        <input type="file" id="openFile" accept="application/json,.json,.paint.json" hidden />
-      </label>
-      <button type="button" id="saveProjectBtn" class="btn-black">Save JSON</button>
-      <button type="button" id="exportPngBtn" class="btn-yellow">Export PNG</button>
-      <select id="styleSelect" class="select-input" aria-label="Style preset"></select>
-    </div>
-  </header>
+      <select id="styleSelect" class="tb-select" aria-label="Style preset"></select>
+      <button type="button" class="tb-icon" id="helpBtn" title="Shortcuts (?)" aria-label="Help">?</button>
+    </header>
 
-  <div class="studio-body">
-    <aside class="tools-sidebar" role="toolbar" aria-label="Tools">
-      <button class="tool-btn active" data-tool="pen" title="Pen (P)">✎</button>
-      <button class="tool-btn" data-tool="eraser" title="Eraser (E)">⌫</button>
-      <button class="tool-btn" data-tool="line" title="Line (L)">／</button>
-      <button class="tool-btn" data-tool="rect" title="Rect (R)">▢</button>
-      <button class="tool-btn" data-tool="ellipse" title="Ellipse (O)">◯</button>
-      <button class="tool-btn" data-tool="fill" title="Fill (G)">🪣</button>
-      <button class="tool-btn" data-tool="eyedropper" title="Eyedropper (I)">🖌</button>
-      <div class="sidebar-divider"></div>
-      <button class="tool-btn" id="undoBtn" title="Undo (Z)">↶</button>
-      <button class="tool-btn" id="redoBtn" title="Redo (Y)">↷</button>
-      <button class="tool-btn" id="clearBtn" title="Clear layer">🗑</button>
+    <div class="optionsbar" id="optionsBar" aria-label="Tool options"></div>
+
+    <aside class="toolrail" role="toolbar" aria-label="Tools">
+      <button class="tool" data-tool="select" title="Select / transform (V)" aria-label="Select"><svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 2-3 6z"/></svg></button>
+      <button class="tool" data-tool="brush" title="Brush (B)" aria-label="Brush"><svg viewBox="0 0 24 24"><path d="M4 20c3 0 5-2 5-4s2-3 3-3l8-9-2-2-9 8c0 1-1 3-3 3s-2 3-2 7z"/></svg></button>
+      <button class="tool" data-tool="eraser" title="Eraser (E)" aria-label="Eraser"><svg viewBox="0 0 24 24"><path d="M3 17l9-9 7 7-5 5H7zM10 20h11"/></svg></button>
+      <div class="rail-sep"></div>
+      <button class="tool" data-tool="rect" title="Rectangle (R)" aria-label="Rectangle"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg></button>
+      <button class="tool" data-tool="ellipse" title="Ellipse (O)" aria-label="Ellipse"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="6"/></svg></button>
+      <button class="tool" data-tool="line" title="Line (L)" aria-label="Line"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/></svg></button>
+      <button class="tool" data-tool="text" title="Text (T)" aria-label="Text"><svg viewBox="0 0 24 24"><path d="M5 5h14M12 5v14M9 19h6"/></svg></button>
+      <div class="rail-sep"></div>
+      <button class="tool" data-tool="eyedropper" title="Eyedropper (I)" aria-label="Eyedropper"><svg viewBox="0 0 24 24"><path d="M14 4l6 6-2 2-6-6zM12 8l-8 8v4h4l8-8"/></svg></button>
+      <button class="tool" data-tool="hand" title="Hand / pan (H, or hold Space)" aria-label="Hand"><svg viewBox="0 0 24 24"><path d="M7 12V6a1.5 1.5 0 013 0v5V4a1.5 1.5 0 013 0v7V5a1.5 1.5 0 013 0v8 -3a1.5 1.5 0 013 0v5c0 4-3 7-7 7s-6-2-8-5l-2-3a1.5 1.5 0 012-2z"/></svg></button>
     </aside>
 
-    <main class="canvas-stage">
-      <div class="stage-floating-bar">
-        <div class="control-item">
-          <label>Brush</label>
-          <select id="brushKind" class="select-input compact">
-            <option value="ink">Ink</option>
-            <option value="pencil">Pencil</option>
-            <option value="marker">Marker</option>
-            <option value="airbrush">Airbrush</option>
-            <option value="charcoal">Charcoal</option>
-            <option value="neon">Neon</option>
-            <option value="watercolor">Watercolor</option>
-          </select>
-        </div>
-        <div class="control-item">
-          <label>Color</label>
-          <div class="color-swatch-picker" id="paletteDots"></div>
-          <input type="color" id="colorPicker" value="#1A1A1A" aria-label="Color" />
-        </div>
-        <div class="control-item">
-          <label>Size</label>
-          <input type="range" id="brushSize" min="1" max="64" value="10" />
-          <span id="brushSizeDisplay" class="val-badge">10px</span>
-        </div>
-        <div class="control-item">
-          <label>Onion</label>
-          <input type="checkbox" id="onionToggle" checked />
-        </div>
-        <div class="control-item">
-          <label>Grid</label>
-          <input type="checkbox" id="gridToggle" />
-        </div>
-        <div class="control-item">
-          <label>Zoom</label>
-          <input type="range" id="zoomRange" min="25" max="300" value="100" />
-          <span id="zoomDisplay" class="val-badge">100%</span>
-        </div>
+    <main class="stage" id="stage">
+      <canvas id="paintCanvas" aria-label="Animation canvas" tabindex="0"></canvas>
+      <div class="stage-hud">
+        <button type="button" class="hud-btn" id="zoomOutBtn" title="Zoom out (-)">−</button>
+        <button type="button" class="hud-btn zoom-label" id="zoomLabel" title="Fit (Ctrl+0)">100%</button>
+        <button type="button" class="hud-btn" id="zoomInBtn" title="Zoom in (+)">+</button>
+        <span class="hud-sep"></span>
+        <label class="hud-toggle" title="Onion skin"><input type="checkbox" id="onionToggle" /> Onion</label>
+        <label class="hud-toggle" title="Pixel grid"><input type="checkbox" id="gridToggle" /> Grid</label>
+        <label class="hud-toggle" title="Snap to objects and canvas"><input type="checkbox" id="snapToggle" checked /> Snap</label>
       </div>
-
-      <div class="stage-wrapper" id="stageWrapper">
-        <canvas id="paintCanvas" aria-label="Canvas"></canvas>
-        <div id="resizeHandle" title="Resize canvas" aria-label="Resize canvas">↘</div>
-      </div>
+      <div class="stage-status" id="statusText"></div>
+      <input type="text" id="textEditor" class="text-editor" hidden aria-label="Text" />
     </main>
 
-    <aside class="layers-panel" aria-label="Layers">
-      <div class="panel-header">
-        <span>LAYERS</span>
-        <button type="button" id="addLayerBtn" class="panel-btn">+ ADD</button>
-      </div>
-      <div class="layers-list" id="layersList"></div>
+    <aside class="sidepanel">
+      <section class="panel" id="inspectorPanel">
+        <header class="panel-head"><span>INSPECTOR</span><span class="panel-sub" id="inspectorTitle">No selection</span></header>
+        <div class="panel-body" id="inspector"></div>
+      </section>
+      <section class="panel grow">
+        <header class="panel-head"><span>LAYERS</span>
+          <span class="panel-actions">
+            <button type="button" class="mini-btn" id="addLayerBtn" title="New layer">＋</button>
+            <button type="button" class="mini-btn" id="dupLayerBtn" title="Duplicate layer">⧉</button>
+            <button type="button" class="mini-btn" id="delLayerBtn" title="Delete layer">✕</button>
+          </span>
+        </header>
+        <div class="layers" id="layersList" role="list"></div>
+        <div class="layer-props" id="layerProps"></div>
+      </section>
     </aside>
+
+    <footer class="timeline" aria-label="Timeline">
+      <div class="transport">
+        <button type="button" class="tp-btn" id="firstBtn" title="First frame (Home)">⏮</button>
+        <button type="button" class="tp-btn" id="prevBtn" title="Previous frame (,)">◂</button>
+        <button type="button" class="tp-btn play" id="playBtn" title="Play / pause (Space)">▶</button>
+        <button type="button" class="tp-btn" id="nextBtn" title="Next frame (.)">▸</button>
+        <button type="button" class="tp-btn" id="lastBtn" title="Last frame (End)">⏭</button>
+        <button type="button" class="tp-btn toggle on" id="loopBtn" title="Loop">⟲</button>
+        <span class="timecode" id="timecode">0:00.000</span>
+        <label class="tp-field">FPS <input type="number" id="fpsInput" min="1" max="60" value="12" /></label>
+        <span class="tp-sep"></span>
+        <button type="button" class="tp-btn text" id="addFrameBtn" title="Add frame">+ Frame</button>
+        <button type="button" class="tp-btn text" id="dupFrameBtn" title="Duplicate frame">Dup</button>
+        <button type="button" class="tp-btn text" id="delFrameBtn" title="Delete frame">Del</button>
+        <label class="tp-field">Frame ms <input type="number" id="frameDurInput" min="1" max="60000" value="83" /></label>
+        <span class="tp-sep"></span>
+        <button type="button" class="tp-btn text" id="keyBtn" title="Add keyframe for selection at playhead (K)">◆ Key</button>
+        <button type="button" class="tp-btn toggle" id="autoKeyBtn" title="Auto-key: transforms create keyframes at the playhead">● Auto-key</button>
+      </div>
+      <div class="tracks" id="tracks">
+        <div class="track-labels" id="trackLabels"></div>
+        <div class="track-scroll" id="trackScroll">
+          <div class="track-area" id="trackArea">
+            <div class="ruler" id="ruler"></div>
+            <div class="frame-row" id="frameRow"></div>
+            <div class="key-rows" id="keyRows"></div>
+            <div class="playhead" id="playhead"><span></span></div>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
 
-  <footer class="timeline-bar" aria-label="Timeline">
-    <div class="timeline-controls">
-      <button type="button" id="playBtn" class="btn-yellow">▶ PLAY</button>
-      <button type="button" id="addFrameBtn" class="btn-black">+ FRAME</button>
-      <button type="button" id="dupFrameBtn" class="btn-black">DUP</button>
-      <button type="button" id="deleteFrameBtn" class="btn-black">DEL</button>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <dialog class="modal" id="helpDialog">
+    <header class="modal-head"><span>KEYBOARD SHORTCUTS</span><button type="button" class="mini-btn" data-close>✕</button></header>
+    <div class="help-grid" id="helpGrid"></div>
+    <p class="help-foot">Agents: everything here is scriptable via <code>window.paintStudio</code>, the <code>paint-studio</code> CLI and the MCP server. Run <code>paintStudio.help()</code> in the console.</p>
+  </dialog>
+
+  <dialog class="modal" id="exportDialog">
+    <header class="modal-head"><span>EXPORT</span><button type="button" class="mini-btn" data-close>✕</button></header>
+    <div class="export-grid">
+      <button type="button" class="export-card" data-export="gif"><b>GIF</b><span>Animated, loops everywhere</span></button>
+      <button type="button" class="export-card" data-export="webm"><b>WebM</b><span>Video via MediaRecorder</span></button>
+      <button type="button" class="export-card" data-export="png"><b>PNG</b><span>Current frame</span></button>
+      <button type="button" class="export-card" data-export="sequence"><b>PNG sequence</b><span>.zip of every frame</span></button>
+      <button type="button" class="export-card" data-export="spritesheet"><b>Sprite sheet</b><span>One PNG grid + JSON</span></button>
+      <button type="button" class="export-card" data-export="json"><b>.paint.json</b><span>Editable project</span></button>
     </div>
-    <div class="frames-timeline" id="framesTimeline"></div>
-    <div class="fps-control">
-      <label for="fpsInput">FPS</label>
-      <input type="number" id="fpsInput" class="select-input" value="12" min="1" max="60" />
-      <label for="loopMode">Loop</label>
-      <select id="loopMode" class="select-input compact">
-        <option value="loop">Loop</option>
-        <option value="once">Once</option>
-      </select>
-    </div>
-  </footer>
+    <label class="export-opt">Scale <select id="exportScale"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+    <div class="export-progress" id="exportProgress" hidden><div></div></div>
+  </dialog>
 
   <script type="module" src="/src/main.ts"></script>
 </body>
