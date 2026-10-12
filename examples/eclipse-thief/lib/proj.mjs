@@ -2,7 +2,7 @@
 import { nid } from './anim.mjs';
 export const W = 1920, H = 1080, FPS = 60;
 export function layer(name, objects, opts = {}) {
-  return { id: nid('L'), name, visible: true, opacity: opts.opacity ?? 1, blendMode: opts.blend ?? 'source-over', parallax: opts.parallax ?? 1, objects, ...(opts.show ? { show: opts.show } : {}), ...(opts.filter ? { filter: opts.filter } : {}), ...(opts.filterKeys ? { filterKeys: opts.filterKeys } : {}), ...(opts.stepMs ? { stepMs: opts.stepMs } : {}) };
+  return { id: nid('L'), name, visible: true, opacity: opts.opacity ?? 1, blendMode: opts.blend ?? 'source-over', parallax: opts.parallax ?? 1, objects, ...(opts.show ? { show: opts.show } : {}), ...(opts.filter ? { filter: opts.filter } : {}), ...(opts.filterKeys ? { filterKeys: opts.filterKeys } : {}), ...(opts.stepMs ? { stepMs: opts.stepMs } : {}), ...(opts.light != null ? { light: opts.light } : {}), ...(opts.rim ? { rim: opts.rim } : {}) };
 }
 export function project(name, durMs, layers, opts = {}) {
   return { version: 2, name, width: W, height: H, fps: FPS, background: opts.background ?? '#000000', palette: [], layers, frames: [{ id: 'f0', duration: durMs }], ...(opts.camera ? { cameraKeyframes: opts.camera } : {}), meta: { author: 'Eclipse Thief production kit', tags: ['eclipse-thief'] } };

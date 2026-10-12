@@ -1,3 +1,5 @@
+import { inkify } from './v2/inkify.mjs';
+const V2 = process.env.ECLIPSE_V1 !== '1';
 // Close-up hand drawings (dedicated action drawings where the body rig is too coarse).
 import { poly, shape, S, smooth, limb, polyline, polar, add, sub, mul, norm, perp, mix, lerp, ell, strand, D2R } from './geom.mjs';
 import { C } from './pal.mjs';
@@ -53,6 +55,6 @@ export function drawGripCU(p) {
   // thumb wraps over from below
   parts.push({ k: 'thumb', d: limb(P(-80, 160), P(30 + tight * 30, 60 - tight * 20), 46 * s, 36 * s), fill: C.glove, stroke: ink(5 * s), z: 3.5 });
   parts.push({ k: 'thumbT', d: limb(P(30 + tight * 30, 60 - tight * 20), P(110 + tight * 20, 20 - tight * 10), 36 * s, 30 * s), fill: C.skin, stroke: ink(4.5 * s), z: 3.55 });
-  return parts;
+  return V2 ? inkify(parts, s) : parts;
 }
 const xy = (q) => [q.x, q.y];

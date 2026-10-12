@@ -1,3 +1,5 @@
+import { inkify } from './v2/inkify.mjs';
+const V2 = process.env.ECLIPSE_V1 !== '1';
 // THE WARDEN — towering armored void. Pose -> key drawing.
 import { frame, poly, shape, S, smooth, strand, limb, limbShade, polar, add, sub, mul, norm, perp, mix, lerp, clamp, polyline, ell, ellPts, D2R, rng } from './geom.mjs';
 import { C } from './pal.mjs';
@@ -154,5 +156,5 @@ export function drawWarden(p0) {
     }
     push('dust', d, C.void, null, 20);
   }
-  return parts;
+  return V2 && !p.sil ? inkify(parts, s, { armor: [C.armor, C.mask] }) : parts;
 }

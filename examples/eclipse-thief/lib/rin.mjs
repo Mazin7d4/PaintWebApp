@@ -1,3 +1,5 @@
+import { drawPerson, RIN_CFG } from './v2/person.mjs';
+const V2 = process.env.ECLIPSE_V1 !== '1';
 // RIN — pose -> key drawing. Skeleton with foreshortening, cel-shaded parts, hair/coat/ribbon secondary motion.
 import { frame, poly, shape, S, smooth, strand, limb, limbShade, polar, add, sub, mul, norm, perp, mix, lerp, clamp, polyline, ell, D2R, rng } from './geom.mjs';
 import { face } from './face.mjs';
@@ -17,6 +19,7 @@ export const RIN_BASE = {
 const inkW = (s, w) => ({ color: C.ink, width: w * s });
 
 export function drawRin(p0) {
+  if (V2) return drawPerson(p0, RIN_CFG);
   const p = { ...RIN_BASE, ...p0 };
   if (p.spin) for (const k of ['lean', 'aL1', 'aL2', 'aR1', 'aR2', 'lL1', 'lL2', 'lR1', 'lR2', 'ftL', 'ftR', 'dagAng']) p[k] += p.spin;
   if (p.ground != null) {

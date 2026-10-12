@@ -30,3 +30,13 @@ for f in examples/eclipse-thief/out/*.paint.json; do paint-studio render $f -o s
 paint-studio concat shots/*.mp4 -o eclipse-thief-ep01.mp4
 node examples/eclipse-thief/sheets/render.mjs ./rin-sheet.mjs rinSheet /tmp/rin.json && paint-studio render /tmp/rin.json -o rin.png --format png
 ```
+
+## v2 character drawing (default; `ECLIPSE_V1=1` renders the old v1 puppets)
+- `lib/v2/person.mjs`: Rin/Sora drawer with the same pose API as v1. It adds organic chain limbs (deltoid/elbow/calf profiles with joint-volume bulge), `ik2` 2-bone IK (`handLT`/`footLT` targets), per-view torso, coat tails, deterministic fixed-step spring secondary motion (`secLock` override), and authored smears (`smearL/R`, `smearLegL/R`).
+- `lib/v2/face2.mjs`: face key drawings for front, 3/4, side and back, with `EXPR` presets (determination, panic, realization, tenderness, smile, shock, calculation).
+- `lib/v2/hair2.mjs`: locks on a 3D head sphere, projected by yaw and depth-sorted, with highlights and per-lock lag.
+- `lib/v2/hands2.mjs`: hand presets (open, relaxed, fist, grip, point, reach, splayed) in back, palm and side views.
+- `lib/v2/inkify.mjs`: upgrades the v1 Warden and close-up hands to ink lines and cel shading, and adds armour cracks.
+- Engine: `stroke.taper/weight/boil` (variable-width ink ribbons), `cel` two-tone shading plus rim, and layer `light`/`rim`. CLI: `--post grain|glow|grain+glow`.
+- Sheets: `node sheets/render.mjs ./v2-sheets.mjs turnaround|actionSheet|handsSheet|checkFace|checkBody|checkSora out.json`
+- Benchmark: `shots/bench.mjs` (`sBench`).

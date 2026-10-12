@@ -15,6 +15,11 @@ export const POSE = {
   rise: { lean: 8, f: 0.4, aR1: 110, aR2: 100, aL1: 75, aL2: 105, lL1: 60, lL2: 110, lR1: 110, lR2: 100, ftL: 0, ftR: 0, squash: 0.95, eye: 0.85, brow: -0.3, mouth: 0.4 },
   catch: { lean: -6, f: 0.4, aL1: -40, aL2: -70, handL: 'open', aR1: 120, aR2: 140, dagAng: 160, lL1: 80, lL2: 95, lR1: 100, lR2: 90, ftL: 0, ftR: 0, squash: 1, eye: 1.1, brow: 0.5, mouth: 0.25, core: 1, lookY: -0.6, hTilt: -14 },
   hold: { lean: 2, f: 0.35, aL1: 50, aL2: -30, handL: 'open', aR1: 105, aR2: 70, dagAng: -60, lL1: 82, lL2: 92, lR1: 98, lR2: 90, ftL: 0, ftR: 0, squash: 1, core: 1, eye: 0.7, brow: 0.6, smile: 0.4, lookX: 0.5, lookY: 0.3, hTilt: 6 },
+  // v2 action key drawings
+  slide: { lean: -52, f: 1, lL1: 2, lL2: 2, ftL: -80, lR1: 85, lR2: 175, ftR: 175, aL1: 130, aL2: 110, handL: 'splayed', aR1: -60, aR2: -40, dagAng: -60, squash: 1, coat: 70, hairX: 1.2, hairY: -0.4, eye: 0.9, mouth: 0.3, brow: -0.6 },
+  reach: { lean: 6, f: 0.12, aR1: 165, aR2: 140, armRk: 0.5, foreR: 0.32, dagAng: -125, dagK: 0.7, handR: 'grip', aL1: -15, aL2: -95, handL: 'open', backArm: 'L', lL1: 42, lL2: 118, lR1: 138, lR2: 62, ftL: -10, ftR: 190, squash: 0.92, expr: 'determination' },
+  twist: { lean: 18, f: 1, lL1: 40, lL2: 100, lR1: 140, lR2: 120, ftL: 0, ftR: 30, squash: 0.9, aL1: 190, aL2: 200, aR1: -10, aR2: 30, dagAng: -10, brow: -1, eye: 0.8, mouth: 0.2, coat: 40, hairX: 0.8 },
+  leapSlash: { lean: 30, f: 0.7, aR1: -60, aR2: -10, dagAng: 10, aL1: 170, aL2: 200, handL: 'open', lL1: 50, lL2: 120, lR1: 150, lR2: 170, ftL: 10, ftR: 190, squash: 1.08, coat: -70, coatOpen: 1, hairX: -1.3, hairY: 0.4, brow: -1, eye: 0.75, mouth: 0.5, smearR: { a1: 160, a2: 120 } },
 };
 /** Run cycle (facing right) as 4 drawings: contact, down, pass, up (repeat with legs swapped). */
 export const RUN = [

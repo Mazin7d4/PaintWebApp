@@ -39,7 +39,7 @@ export function samplePoses(keys, endMs) {
 }
 
 const fillOf = (f) => (f == null ? undefined : typeof f === 'string' ? { color: f } : f);
-const strokeOf = (s) => (s == null ? undefined : { color: s.color ?? s[0], width: s.width ?? s[1], lineJoin: 'round', lineCap: 'round' });
+const strokeOf = (s) => (s == null ? undefined : { ...(Array.isArray(s) ? {} : s), color: s.color ?? s[0], width: s.width ?? s[1], lineJoin: 'round', lineCap: 'round' });
 
 /** Bake an animated character/effect into Paint Studio objects (one shape per part, swapping key drawings). */
 export function bake(draw, keys, endMs, { show, prefix = 'p', extra = {} } = {}) {
@@ -53,8 +53,8 @@ export function bake(draw, keys, endMs, { show, prefix = 'p', extra = {} } = {})
       seen.add(key);
       if (!parts.has(key)) parts.set(key, { z: p.z ?? i, order: parts.size, drawings: [], last: null, blend: p.blend });
       const rec = parts.get(key);
-      const sig = p.d + JSON.stringify(p.fill) + JSON.stringify(p.stroke) + (p.alpha ?? 1);
-      if (sig !== rec.last) { rec.drawings.push({ t, path: p.d, fill: fillOf(p.fill), stroke: strokeOf(p.stroke), alpha: p.alpha }); rec.last = sig; }
+      const sig = p.d + JSON.stringify(p.fill) + JSON.stringify(p.stroke) + (p.alpha ?? 1) + (p.cel ? JSON.stringify(p.cel) : '');
+      if (sig !== rec.last) { rec.drawings.push({ t, path: p.d, fill: fillOf(p.fill), stroke: strokeOf(p.stroke), ...(p.cel ? { cel: p.cel } : {}), alpha: p.alpha }); rec.last = sig; }
     });
     for (const [key, rec] of parts) if (!seen.has(key) && rec.last !== '') { rec.drawings.push({ t, path: '' }); rec.last = ''; }
   });
@@ -67,5 +67,5 @@ export function bake(draw, keys, endMs, { show, prefix = 'p', extra = {} } = {})
 
 /** Static drawing (backgrounds/props) to shape objects. */
 export function still(parts, opts = {}) {
-  return parts.map((p) => ({ type: 'shape', shape: 'path', id: nid(opts.prefix ?? 's'), x: 0, y: 0, pivot: { x: 0, y: 0 }, path: p.d, fill: fillOf(p.fill), stroke: strokeOf(p.stroke), ...(opts.show ? { show: opts.show } : {}), ...(p.extra ?? {}) }));
+  return parts.map((p) => ({ type: 'shape', shape: 'path', id: nid(opts.prefix ?? 's'), x: 0, y: 0, pivot: { x: 0, y: 0 }, path: p.d, fill: fillOf(p.fill), stroke: strokeOf(p.stroke), ...(p.cel ? { cel: p.cel } : {}), ...(opts.show ? { show: opts.show } : {}), ...(p.extra ?? {}) }));
 }
