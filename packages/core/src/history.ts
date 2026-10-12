@@ -54,6 +54,44 @@ export class HistoryStack {
     return this.current;
   }
 
+  private txBase: PaintProject | null = null;
+
+  /** Start a live edit (e.g. a drag). Updates during it are not recorded individually. */
+  begin(): void {
+    if (!this.txBase) this.txBase = cloneProject(this.current);
+  }
+
+  /** Mutate the live edit, starting from the state captured by begin(). */
+  update(mutator: (draft: PaintProject) => void): PaintProject {
+    if (!this.txBase) this.begin();
+    const draft = cloneProject(this.txBase as PaintProject);
+    mutator(draft);
+    this.current = draft;
+    return this.current;
+  }
+
+  get inTransaction(): boolean {
+    return this.txBase !== null;
+  }
+
+  /** Finish the live edit as ONE undo step (no-op if nothing changed). */
+  end(): boolean {
+    const base = this.txBase;
+    this.txBase = null;
+    if (!base) return false;
+    if (JSON.stringify(base) === JSON.stringify(this.current)) return false;
+    this.undoStack.push(base);
+    if (this.undoStack.length > this.limit) this.undoStack.shift();
+    this.redoStack = [];
+    return true;
+  }
+
+  /** Abort the live edit and restore the state from begin(). */
+  cancel(): void {
+    if (this.txBase) this.current = this.txBase;
+    this.txBase = null;
+  }
+
   canUndo(): boolean {
     return this.undoStack.length > 0;
   }

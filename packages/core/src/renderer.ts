@@ -207,10 +207,19 @@ export function renderProject(
   const style = getStylePreset(project.style?.id);
   const smoothing = options?.imageSmoothing ?? style.imageSmoothing;
   ctx.imageSmoothingEnabled = smoothing;
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const vt = options?.viewTransform ?? [1, 0, 0, 1, 0, 0];
+  ctx.setTransform(vt[0], vt[1], vt[2], vt[3], vt[4], vt[5]);
+  ctx.save();
+  if (options?.viewTransform) {
+    ctx.beginPath();
+    ctx.rect(0, 0, project.width, project.height);
+    ctx.clip();
+  }
   ctx.clearRect(0, 0, project.width, project.height);
-  ctx.fillStyle = project.background;
-  ctx.fillRect(0, 0, project.width, project.height);
+  if (!options?.transparent) {
+    ctx.fillStyle = project.background;
+    ctx.fillRect(0, 0, project.width, project.height);
+  }
 
   const camera = options?.camera ?? sampleCamera(project.camera, project.cameraKeyframes, timeMs);
   ctx.save();
@@ -244,6 +253,7 @@ export function renderProject(
   }
 
   paintLayers(ctx, project, timeMs);
+  ctx.restore();
   ctx.restore();
 }
 

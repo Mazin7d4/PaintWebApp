@@ -281,6 +281,13 @@ export interface RenderOptions {
   camera?: CameraState;
   /** Pixel art nearest-neighbor feel */
   imageSmoothing?: boolean;
+  /**
+   * Base matrix [a,b,c,d,e,f] mapping project space to the target canvas
+   * (editor zoom/pan/hi-DPI). When set, only the project rect is cleared/painted.
+   */
+  viewTransform?: [number, number, number, number, number, number];
+  /** Skip painting the background colour */
+  transparent?: boolean;
 }
 
 export interface CanvasLike {
