@@ -12,7 +12,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@paint-studio/core": "2.0.0"
+    "@paint-studio/core": "2.0.0",
+    "gifenc": "^1.0.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
