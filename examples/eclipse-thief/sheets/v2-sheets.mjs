@@ -51,3 +51,16 @@ export function checkSora() {
   [[0, 'smile'], [0.5, 'panic'], [1, 'tenderness']].forEach(([f, e], i) => o.push(...one(drawSora2, { x: 330 + i * 640, ground: 1000, s: 2.6, f, expr: e, aL1: 95, aL2: 92, aR1: 85, aR2: 88, handL: 'relaxed', handR: 'relaxed', secLock: 1 }, 'sc' + i)));
   return project('csora', 100, [BG(), layer('c', o, { light: -55 })]);
 }
+import { drawRin } from '../lib/rin.mjs';
+import { EXPR } from '../lib/v2/face2.mjs';
+export function exprSheet3() {
+  const o = [];
+  Object.keys(EXPR).forEach((e, i) => { const x = 240 + (i % 4) * 480, y = 120 + Math.floor(i / 4) * 500; o.push(...one(drawRin2, { x, y: y + 700, s: 3.1, f: i % 2 ? 0.35 : 0.1, expr: e, dagger: 0, aL1: 95, aL2: 92, aR1: 85, aR2: 88, secLock: 1 }, 'e' + i), txt(e, x, y + 410, 34, '#fff')); });
+  return project('expr3', 100, [BG(), layer('c', o, { light: -55 })]);
+}
+// face comparison panel (run with ECLIPSE_V1=1 for the v1 rig); FACE_STYLE picks v1/v2 face on the v2 rig
+export function facePanel() {
+  const o = [];
+  [[0.1, 'determination'], [0.4, 'realization'], [0.4, 'smile']].forEach(([f, e], i) => o.push(...one(drawRin, { ...EXPR[e], expr: e, x: 330 + i * 640, y: 1500, s: 5, f, dagger: 0, aL1: 95, aL2: 92, aR1: 85, aR2: 88, secLock: 1, faceStyle: process.env.FACE_STYLE }, 'fp' + i)));
+  return project('fpanel', 100, [BG('#3C4260'), layer('rin', o, { light: -55, rim: '#9FB4E8' })]);
+}

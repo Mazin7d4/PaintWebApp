@@ -9,6 +9,7 @@ import { face2, EXPR } from './face2.mjs';
 import { hair2, makeLocks, RIN_HAIR, SORA_HAIR } from './hair2.mjs';
 import { hand2 } from './hands2.mjs';
 import { RIN_BASE } from '../rin.mjs';
+import { face as faceV1 } from '../face.mjs';
 
 export const RIN_CFG = {
   name: 'rin', hairStyle: RIN_HAIR, coatTails: true,
@@ -263,7 +264,13 @@ export function drawPerson(p0, cfg = RIN_CFG) {
   torso(10);
   const nt = polar(N, up, 22 * s);
   push('neck', chainPath([add(N, mul(upv, -6 * s)), nt], [[0, 8, 8], [1, 7, 7]], { scale: s * PR.width }), cfg.face.skin, inner(), 9.5, cel(cfg.face.skinShade, { d: 5 }));
-  parts.push(...fz(face2({ ...ho, view, mirror, cfg: cfg.face, ...pick(p) }), 20));
+  // face style: 'v1' (default, the original hand-tuned face) or 'v2' (per-view anime face kit)
+  const fstyle = p.faceStyle ?? cfg.faceStyle ?? 'v1';
+  if (fstyle === 'v2') parts.push(...fz(face2({ ...ho, view, mirror, cfg: cfg.face, ...pick(p) }), 20));
+  else if (view !== 'back') {
+    const F = cfg.face;
+    parts.push(...faceV1({ x: headC.x, y: headC.y, rot: hrot, s: hs, f: clamp(hyaw / 90, -1, 1), light: p.light, irisC: F.irisC, skin: F.skin, skinShade: F.skinShade, browZ: 7.5, ...pick(p) }, 20, 'f'));
+  }
   parts.push(...fz(hair.front, 26));
   if (!back) { drawArm(-backA, 30, 'armF'); if (backA === 1) dagger(31); else core(31); if (backA !== 1) ribbon(32); }
   else { drawArm(-backA, 1.5, 'armF'); }
