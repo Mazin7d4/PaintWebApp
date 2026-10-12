@@ -1,4 +1,11 @@
-import { createCanvas as napiCreateCanvas } from '@napi-rs/canvas';
+import { createCanvas as napiCreateCanvas, GlobalFonts, Path2D as NapiPath2D } from '@napi-rs/canvas';
+
+// The shared renderer uses the global Path2D for `path` shapes; Node has none, so provide napi's.
+const g = globalThis as unknown as { Path2D?: unknown };
+if (typeof g.Path2D === 'undefined') g.Path2D = NapiPath2D;
+
+/** Register extra font files/dirs (PAINT_STUDIO_FONTS=dir1:dir2) for text objects. */
+for (const dir of (process.env.PAINT_STUDIO_FONTS ?? '').split(':').filter(Boolean)) GlobalFonts.loadFontsFromDir(dir);
 import type { CanvasFactory, CanvasLike } from '@paint-studio/core';
 
 export const nodeCanvasFactory: CanvasFactory = (width, height) => {

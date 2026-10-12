@@ -16,7 +16,7 @@ import {
   EDIT_OP_NAMES,
   type EditOp,
 } from '@paint-studio/core';
-import { renderGif, renderPngSequence, renderSpriteSheet, renderStill } from './render.js';
+import { concatVideos, renderGif, renderPngSequence, renderSpriteSheet, renderStill, renderVideo } from './render.js';
 
 async function loadProject(file: string): Promise<PaintProject> {
   const raw = await readFile(file, 'utf8');
@@ -158,14 +158,19 @@ program
   .description('Render PNG still, PNG sequence, GIF, or sprite sheet')
   .argument('<file>', 'project JSON')
   .option('-o, --out <path>', 'output file or directory', 'out.gif')
-  .option('--format <fmt>', 'gif | png | png-sequence | spritesheet', 'gif')
+  .option('--format <fmt>', 'gif | png | png-sequence | spritesheet | mp4 | webm (default: from --out extension, else gif)')
+  .option('--scale <k>', 'video output scale relative to project size', '1')
+  .option('--crf <n>', 'video quality (lower = better)')
+  .option('--from <ms>', 'video: start time')
+  .option('--to <ms>', 'video: end time')
   .option('--fps <fps>', 'override export fps')
   .option('--time <ms>', 'time for single PNG still', '0')
   .option('--columns <n>', 'spritesheet columns', '4')
   .action(async (file: string, opts) => {
     const project = await loadProject(file);
     const fps = opts.fps ? Number(opts.fps) : project.fps;
-    const fmt = opts.format as string;
+    const ext = path.extname(opts.out as string).slice(1).toLowerCase();
+    const fmt = (opts.format as string | undefined) ?? (['mp4', 'webm', 'gif', 'png'].includes(ext) ? ext : 'gif');
     const out = opts.out as string;
     console.log(`Rendering ${project.name} → ${out} (${fmt}) @ ${fps}fps`);
     if (fmt === 'gif') {
@@ -180,9 +185,33 @@ program
     } else if (fmt === 'spritesheet') {
       const f = await renderSpriteSheet(project, out, fps, Number(opts.columns));
       console.log(`Wrote ${f}`);
+    } else if (fmt === 'mp4' || fmt === 'webm') {
+      const target = out.toLowerCase().endsWith(`.${fmt}`) ? out : `${out}.${fmt}`;
+      let last = 0;
+      const f = await renderVideo(project, target, {
+        fps,
+        scale: Number(opts.scale),
+        crf: opts.crf ? Number(opts.crf) : undefined,
+        fromMs: opts.from ? Number(opts.from) : undefined,
+        toMs: opts.to ? Number(opts.to) : undefined,
+        onProgress: (d, n) => {
+          const pct = Math.floor((d / n) * 10);
+          if (pct > last || d === n) { last = pct; process.stderr.write(`  ${d}/${n} frames\n`); }
+        },
+      });
+      console.log(`Wrote ${f}`);
     } else {
       throw new Error(`Unknown format: ${fmt}`);
     }
+  });
+
+program
+  .command('concat')
+  .description('Concatenate rendered MP4/WebM clips (same size/fps/codec) into one video without re-encoding')
+  .argument('<inputs...>', 'video files in order')
+  .requiredOption('-o, --out <path>', 'output video')
+  .action(async (inputs: string[], opts) => {
+    console.log(`Wrote ${await concatVideos(inputs, opts.out)}`);
   });
 
 program

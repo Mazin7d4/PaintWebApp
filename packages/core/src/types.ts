@@ -139,8 +139,12 @@ export interface StrokeObject {
   reveal?: number;
   /** If set, reveal animates 0→1 over this many ms from t=0 (or object start) */
   writeOnMs?: number;
+  /** Delay before the write-on starts (ms) */
+  writeOnDelayMs?: number;
   transform?: Partial<Transform2D>;
   keyframes?: Keyframe[];
+  /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
+  pivot?: Vec2;
 }
 
 export interface ShapeObject {
@@ -163,6 +167,8 @@ export interface ShapeObject {
   cornerRadius?: number;
   transform?: Partial<Transform2D>;
   keyframes?: Keyframe[];
+  /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
+  pivot?: Vec2;
 }
 
 export interface TextObject {
@@ -182,6 +188,8 @@ export interface TextObject {
   letterSpacing?: number;
   transform?: Partial<Transform2D>;
   keyframes?: Keyframe[];
+  /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
+  pivot?: Vec2;
 }
 
 export interface ParticleEmitterObject {
@@ -200,6 +208,8 @@ export interface ParticleEmitterObject {
   seed?: number;
   transform?: Partial<Transform2D>;
   keyframes?: Keyframe[];
+  /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
+  pivot?: Vec2;
 }
 
 export type DrawObject = StrokeObject | ShapeObject | TextObject | ParticleEmitterObject;
@@ -211,6 +221,11 @@ export interface Layer {
   locked?: boolean;
   opacity: number;
   blendMode: BlendMode;
+  /**
+   * Camera parallax factor: 1 = moves with the camera (default), 0 = fixed to
+   * the screen (UI/title overlays), <1 = distant background, >1 = foreground.
+   */
+  parallax?: number;
   objects: DrawObject[];
 }
 

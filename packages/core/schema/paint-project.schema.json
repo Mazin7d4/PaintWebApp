@@ -48,6 +48,7 @@
           "locked": { "type": "boolean" },
           "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
           "blendMode": { "type": "string" },
+          "parallax": { "type": "number", "description": "Camera parallax factor (1 = world, 0 = screen-fixed, <1 far, >1 near)" },
           "objects": { "type": "array", "items": { "type": "object" } }
         }
       }

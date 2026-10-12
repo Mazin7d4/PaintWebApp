@@ -3,6 +3,7 @@ import { frameIndexAtTime, projectDurationMs, timeAtFrameStart } from './project
 import { getStylePreset } from './styles.js';
 import { sampleCamera, sampleTransform } from './tween.js';
 import type {
+  CameraState,
   CanvasFactory,
   CanvasLike,
   DrawObject,
@@ -67,7 +68,7 @@ function seededRandom(seed: number): () => number {
 function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: number): void {
   const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
   ctx.save();
-  applyTransform(ctx, tf, (obj.x ?? 0) + (obj.w ?? 0) / 2, (obj.y ?? 0) + (obj.h ?? 0) / 2);
+  applyTransform(ctx, tf, obj.pivot?.x ?? (obj.x ?? 0) + (obj.w ?? 0) / 2, obj.pivot?.y ?? (obj.y ?? 0) + (obj.h ?? 0) / 2);
   applyShadow(ctx, obj.shadow);
   ctx.beginPath();
   if (obj.shape === 'rect') {
@@ -117,7 +118,7 @@ function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: numb
 function drawText(ctx: CanvasRenderingContext2D, obj: TextObject, timeMs: number): void {
   const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
   ctx.save();
-  applyTransform(ctx, tf, obj.x, obj.y);
+  applyTransform(ctx, tf, obj.pivot?.x ?? obj.x, obj.pivot?.y ?? obj.y);
   applyShadow(ctx, obj.shadow);
   const size = obj.fontSize ?? 32;
   const weight = obj.fontWeight ?? 700;
@@ -140,7 +141,7 @@ function drawParticles(ctx: CanvasRenderingContext2D, obj: ParticleEmitterObject
   const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
   const rand = seededRandom(obj.seed ?? 1);
   ctx.save();
-  applyTransform(ctx, tf, obj.x, obj.y);
+  applyTransform(ctx, tf, obj.pivot?.x ?? obj.x, obj.pivot?.y ?? obj.y);
   for (let i = 0; i < obj.count; i++) {
     const life = obj.life;
     const localT = ((timeMs / life) + rand()) % 1;
@@ -164,10 +165,10 @@ function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, timeMs: numb
     const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
     let reveal = obj.reveal ?? 1;
     if (obj.writeOnMs && obj.writeOnMs > 0) {
-      reveal = Math.min(1, Math.max(0, timeMs / obj.writeOnMs));
+      reveal = Math.min(1, Math.max(0, (timeMs - (obj.writeOnDelayMs ?? 0)) / obj.writeOnMs));
     }
     ctx.save();
-    applyTransform(ctx, tf);
+    applyTransform(ctx, tf, obj.pivot?.x ?? 0, obj.pivot?.y ?? 0);
     drawStroke(ctx, obj.brush, obj.points, reveal);
     ctx.restore();
   } else if (obj.type === 'shape') {
@@ -223,10 +224,6 @@ export function renderProject(
 
   const camera = options?.camera ?? sampleCamera(project.camera, project.cameraKeyframes, timeMs);
   ctx.save();
-  ctx.translate(project.width / 2, project.height / 2);
-  ctx.rotate(((camera.rotation ?? 0) * Math.PI) / 180);
-  ctx.scale(camera.zoom, camera.zoom);
-  ctx.translate(-project.width / 2 - camera.x, -project.height / 2 - camera.y);
 
   // Onion skin (previous/next frame ghosts) — timeline editor aid
   if (options?.onionSkin) {
@@ -238,7 +235,7 @@ export function renderProject(
       const t = timeAtFrameStart(project, fi);
       ctx.save();
       ctx.globalAlpha = opacity * (1 - (d - 1) / (prev + 1));
-      paintLayers(ctx, project, t);
+      paintLayers(ctx, project, t, camera);
       ctx.restore();
     }
     for (let d = 1; d <= next; d++) {
@@ -247,20 +244,30 @@ export function renderProject(
       const t = timeAtFrameStart(project, fi);
       ctx.save();
       ctx.globalAlpha = opacity * (1 - (d - 1) / (next + 1));
-      paintLayers(ctx, project, t);
+      paintLayers(ctx, project, t, camera);
       ctx.restore();
     }
   }
 
-  paintLayers(ctx, project, timeMs);
+  paintLayers(ctx, project, timeMs, camera);
   ctx.restore();
   ctx.restore();
 }
 
-function paintLayers(ctx: CanvasRenderingContext2D, project: PaintProject, timeMs: number): void {
+function applyCamera(ctx: CanvasRenderingContext2D, project: PaintProject, camera: CameraState, parallax: number): void {
+  const k = parallax;
+  const zoom = 1 + (camera.zoom - 1) * Math.min(1, Math.max(0, k));
+  ctx.translate(project.width / 2, project.height / 2);
+  ctx.rotate((((camera.rotation ?? 0) * Math.min(1, k)) * Math.PI) / 180);
+  ctx.scale(zoom, zoom);
+  ctx.translate(-project.width / 2 - camera.x * k, -project.height / 2 - camera.y * k);
+}
+
+function paintLayers(ctx: CanvasRenderingContext2D, project: PaintProject, timeMs: number, camera: CameraState): void {
   for (const layer of project.layers) {
     if (!layer.visible) continue;
     ctx.save();
+    applyCamera(ctx, project, camera, layer.parallax ?? 1);
     ctx.globalAlpha *= layer.opacity;
     ctx.globalCompositeOperation = layer.blendMode;
     for (const obj of layer.objects) {

@@ -89,6 +89,7 @@ export function localBounds(obj: DrawObject, measure: TextMeasurer = approxTextM
 
 /** Pivot the renderer uses for rotation/scale (kept in sync with renderer.ts). */
 export function objectPivot(obj: DrawObject): Vec2 {
+  if (obj.pivot) return obj.pivot;
   if (obj.type === 'shape') return { x: obj.x + (obj.w ?? 0) / 2, y: obj.y + (obj.h ?? 0) / 2 };
   if (obj.type === 'stroke') return { x: 0, y: 0 };
   return { x: obj.x, y: obj.y };
