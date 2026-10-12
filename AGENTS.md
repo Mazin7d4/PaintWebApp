@@ -76,17 +76,52 @@ Use squash & stretch via opposite `scaleX`/`scaleY` (see `examples/bouncing-ball
 5. **Write-on ink** — `writeOnMs` on strokes for logo reveals.
 6. **Study examples** — `examples/ink-logo-reveal.paint.json`, `bouncing-ball.paint.json`, `neon-pulse.paint.json`.
 
+## Edit ops (one language for CLI, MCP and browser)
+
+Instead of rewriting the whole JSON, apply small **edit ops**. A batch is atomic: if any op fails, nothing is written.
+
+```bash
+npx paint-studio objects shot.paint.json --time 500        # ids, world bounds, keyframe times
+npx paint-studio edit shot.paint.json --ops ops.json       # or --op '{"op":"..."}' (repeatable), --dry-run, -o out.json
+```
+
+```json
+[
+  {"op":"addObject","layerId":"layer_1","object":{"id":"ball","type":"shape","shape":"ellipse","x":400,"y":100,"w":120,"h":120,"fill":{"color":"#FF5A5F"}}},
+  {"op":"setKeyframe","id":"ball","t":0,"transform":{"y":0}},
+  {"op":"setKeyframe","id":"ball","t":600,"transform":{"y":300,"scaleX":1.3,"scaleY":0.7},"easing":"easeInCubic"},
+  {"op":"setTransform","id":"ball","transform":{"rotation":15}},
+  {"op":"setLayer","layerId":"layer_1","props":{"name":"Hero","opacity":0.9}},
+  {"op":"setFrame","index":0,"duration":1200}
+]
+```
+
+Ops: `addLayer`, `removeLayer`, `setLayer`, `moveLayer`, `addObject`, `removeObject`, `duplicateObject`, `updateObject`, `moveObject` (z-order or another layer), `setTransform` (writes a keyframe when the object is animated or `atMs` is given), `translate`, `setKeyframe` (with no transform it captures the current pose), `removeKeyframe`, `moveKeyframe`, `clearKeyframes`, `setProject`, `addFrame`, `removeFrame`, `setFrame`.
+
+MCP exposes the same ops as `paint_edit_project` ({file, ops}) and `paint_list_objects`.
+
+### Transforms
+
+`transform` = `{x, y, scaleX, scaleY, rotation (deg), opacity}`. `x`/`y` are offsets from the geometry's own coordinates. Rotation and scale pivot around the shape's centre (rect/ellipse), the anchor `x,y` (text, particles), or the origin (strokes). The editor compensates for this, so you can pick any pivot. Core helpers `resizeTransform`, `rotateTransformAround`, `scaleTransformAround`, `worldCorners` and `worldAabb` do the exact math if you need it.
+
 ## Browser API
 
-When the editor is open:
+When the editor is open (https://mazin7d4.github.io/PaintWebApp/ or `npm run dev`), run `paintStudio.help()` for the full list:
 
 ```js
-window.paintStudio.getProject()
-window.paintStudio.setProject(project)
-window.paintStudio.exportJson()
-window.paintStudio.undo()
-window.paintStudio.redo()
+const ps = window.paintStudio;
+ps.apply([...ops])                    // same ops as the CLI; one undo step; returns created ids
+ps.addObject({type:'text', text:'Hi', x:100, y:120, fontSize:64, fill:{color:'#1A1A1A'}})
+ps.setKeyframe(id, 500, {x: 200}, 'easeOutBack'); ps.setTransform(id, {rotation: 30}, 500)
+ps.getTransform(id, t); ps.getBounds(id, t); ps.listObjects()
+ps.addLayer('FX'); ps.setLayer(layerId, {opacity: .5, locked: true}); ps.moveLayer(layerId, 0)
+ps.select([id]); ps.setTime(750); ps.play(); ps.setTool('brush'); ps.setBrush({kind:'neon', size:12})
+ps.worldToScreen({x, y})              // for Playwright mouse input on the canvas
+await ps.exportGif(); await ps.exportWebm(); await ps.exportSpriteSheet(); ps.renderFrame(500)
+ps.undo(); ps.redo(); ps.getProject(); ps.setProject(p)
 ```
+
+Append `?blank` to the URL for an empty canvas, or `?fresh` to ignore autosave. The e2e tests in `packages/web/e2e` drive the editor this way.
 
 ## Hyperframes interop
 
@@ -95,6 +130,8 @@ window.paintStudio.redo()
 ## Repo map
 
 - `packages/core` — engine
-- `packages/cli` — CLI
-- `packages/web` — editor
+- `packages/core` — `geometry.ts` (bounds, matrices, resize/rotate, snapping), `ops.ts` (edit ops), `history.ts` (undo + drag transactions)
+- `packages/cli` — CLI (`create`, `check`, `info`, `objects`, `edit`, `render`, `generate`, `export-hyperframes`)
+- `packages/mcp-server` — MCP tools
+- `packages/web` — editor (`main.ts`, `exporters.ts`, `starter.ts`) + Playwright e2e
 - `examples/` — reference animations

@@ -15,6 +15,8 @@
 ```
 npx paint-studio create project.paint.json --style neon
 npx paint-studio check project.paint.json
+npx paint-studio objects project.paint.json --time 0
+npx paint-studio edit project.paint.json --op '{"op":"setKeyframe","id":"ball","t":500,"transform":{"y":300},"easing":"easeOutBounce"}'
 npx paint-studio render project.paint.json -o out.gif
 npx paint-studio render project.paint.json -o frames --format png-sequence
 npx paint-studio export-hyperframes project.paint.json -o composition.html
@@ -27,3 +29,16 @@ flat-vector | inked-cartoon | pixel-art | painterly | neon
 ## Object types
 
 stroke (brush + pressure points, writeOnMs) | shape | text | particles
+
+## Edit ops
+
+addLayer | removeLayer | setLayer | moveLayer | addObject | removeObject | duplicateObject | updateObject | moveObject | setTransform | translate | setKeyframe | removeKeyframe | moveKeyframe | clearKeyframes | setProject | addFrame | removeFrame | setFrame
+Same JSON ops are used by `paint-studio edit`, the MCP tool `paint_edit_project`, and `window.paintStudio.apply()`. Batches are atomic.
+
+## MCP tools
+
+paint_create_project | paint_check_project | paint_generate_animation | paint_edit_project | paint_list_objects | paint_render
+
+## Browser
+
+window.paintStudio.help() lists the API: apply, addObject, setTransform, setKeyframe, addLayer, select, setTime, play, exportGif, exportWebm, exportSpriteSheet, exportPngSequence, worldToScreen, undo, redo.

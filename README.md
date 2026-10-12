@@ -23,6 +23,10 @@
   <img src="https://img.shields.io/badge/format-paint.json%20v2-black" alt="format" />
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/editor.png" alt="Paint Studio editor: canvas, inspector, layers and keyframe timeline" width="900" />
+</p>
+
 ## Why
 
 Coding agents should be able to **produce real animations** — not just screenshots of a paint toy. Paint Studio gives them:
@@ -93,12 +97,22 @@ node packages/cli/dist/bin.js generate "a fox running through snow, inked style"
 
 ```bash
 node packages/mcp-server/dist/server.js
-# Tools: paint_create_project, paint_check_project, paint_generate_animation, paint_render
+# Tools: paint_create_project, paint_check_project, paint_generate_animation, paint_edit_project, paint_list_objects, paint_render
 ```
 
-## Editor features (v2)
+## Editor
 
-Undo/redo · onion skin · layers (visibility/lock) · timeline (add/dup/delete/play/loop) · brushes (ink/pencil/marker/airbrush/charcoal/neon/watercolor) · shapes · fill · eyedropper · zoom · pixel grid · style presets · import/export `.paint.json` · IndexedDB-free **localStorage autosave** · canvas resize handle · pressure-aware pointer strokes
+<p align="center"><img src="docs/screenshots/transform.png" alt="Rotating an object with live angle readout" width="760" /></p>
+
+- **Pro transforms**: select tool with bounding box, 8 resize handles and a rotate handle. Hold <kbd>Shift</kbd> to keep the ratio, <kbd>Alt</kbd> to scale from the centre, <kbd>Shift</kbd>-rotate to snap to 15°, and <kbd>Alt</kbd>-drag to duplicate. Snapping guides align to objects and the canvas. You also get marquee and shift-click multi-select, group scale/rotate, arrow-key nudge, and align buttons. The math stays exact for rotated objects.
+- **Viewport**: hi-DPI canvas, wheel zoom toward the cursor, <kbd>Space</kbd>-drag or middle-mouse pan, fit/100% shortcuts.
+- **Drawing**: pointer-event brushes (ink, pencil, marker, airbrush, charcoal, neon, watercolor) with pen pressure and coalesced events. Also rect, ellipse and line (with constraints), text, eraser and eyedropper.
+- **Inspector**: numeric X/Y/W/H/rotation/opacity with scrubbable labels, fill/stroke/brush/text styling, keyframe toggle and easing per key, plus arrange, duplicate and delete.
+- **Layers**: visibility, lock, opacity, blend mode, double-click rename, drag to reorder, duplicate and delete.
+- **Timeline**: ruler scrubbing, frame cells, one keyframe track per object with draggable diamonds (right-click deletes), play/pause/loop, fps, frame duration, and **auto-key** mode.
+- **Everything is undoable.** A whole drag is one undo step. Transforms on animated objects write keyframes at the playhead.
+- **Export**: GIF, WebM (MediaRecorder), PNG, PNG-sequence `.zip`, sprite sheet + JSON, and `.paint.json` open/save. Autosave is on.
+- Keyboard shortcuts everywhere (press <kbd>?</kbd>), toasts instead of alerts, and a starter scene on first visit.
 
 ## Agent workflow
 
