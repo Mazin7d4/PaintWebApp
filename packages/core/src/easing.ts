@@ -5,6 +5,8 @@ export function ease(name: EasingName | undefined, t: number): number {
   switch (name ?? 'linear') {
     case 'linear':
       return x;
+    case 'step':
+      return x >= 1 ? 1 : 0;
     case 'easeIn':
       return x * x;
     case 'easeOut':

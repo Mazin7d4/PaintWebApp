@@ -25,7 +25,9 @@ export type EasingName =
   | 'easeInOutCubic'
   | 'easeOutBack'
   | 'easeOutElastic'
-  | 'easeOutBounce';
+  | 'easeOutBounce'
+  /** Hold the previous key until the next key (hard cut / key-drawing pop) */
+  | 'step';
 
 export type BrushKind =
   | 'ink'
@@ -145,6 +147,10 @@ export interface StrokeObject {
   keyframes?: Keyframe[];
   /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
   pivot?: Vec2;
+  /** Time windows [fromMs, toMs) during which the object is drawn (cuts, drawing swaps). */
+  show?: [number, number][];
+  /** Quantize this object's animation time: 41.67 = on 1s, 83.33 = on 2s, 125 = on 3s (24 fps anime timing). */
+  stepMs?: number;
 }
 
 export interface ShapeObject {
@@ -161,6 +167,8 @@ export interface ShapeObject {
   r?: number;
   points?: Vec2[];
   path?: string;
+  /** Key drawings: from each t the path (and optional fill/stroke) is swapped in. Drawing library + replacement animation. */
+  drawings?: { t: number; path: string; fill?: FillStyle; stroke?: StrokeStyle }[];
   fill?: FillStyle;
   stroke?: StrokeStyle;
   shadow?: ShadowStyle;
@@ -169,6 +177,10 @@ export interface ShapeObject {
   keyframes?: Keyframe[];
   /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
   pivot?: Vec2;
+  /** Time windows [fromMs, toMs) during which the object is drawn (cuts, drawing swaps). */
+  show?: [number, number][];
+  /** Quantize this object's animation time: 41.67 = on 1s, 83.33 = on 2s, 125 = on 3s (24 fps anime timing). */
+  stepMs?: number;
 }
 
 export interface TextObject {
@@ -190,6 +202,10 @@ export interface TextObject {
   keyframes?: Keyframe[];
   /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
   pivot?: Vec2;
+  /** Time windows [fromMs, toMs) during which the object is drawn (cuts, drawing swaps). */
+  show?: [number, number][];
+  /** Quantize this object's animation time: 41.67 = on 1s, 83.33 = on 2s, 125 = on 3s (24 fps anime timing). */
+  stepMs?: number;
 }
 
 export interface ParticleEmitterObject {
@@ -210,6 +226,10 @@ export interface ParticleEmitterObject {
   keyframes?: Keyframe[];
   /** Rotation/scale pivot in local space. Share one pivot across parts to animate them as a rig. */
   pivot?: Vec2;
+  /** Time windows [fromMs, toMs) during which the object is drawn (cuts, drawing swaps). */
+  show?: [number, number][];
+  /** Quantize this object's animation time: 41.67 = on 1s, 83.33 = on 2s, 125 = on 3s (24 fps anime timing). */
+  stepMs?: number;
 }
 
 export type DrawObject = StrokeObject | ShapeObject | TextObject | ParticleEmitterObject;
@@ -226,6 +246,14 @@ export interface Layer {
    * the screen (UI/title overlays), <1 = distant background, >1 = foreground.
    */
   parallax?: number;
+  /** Time windows [fromMs, toMs) during which the layer is drawn (shot cuts). */
+  show?: [number, number][];
+  /** Quantize animation time of all objects (camera stays smooth): 83.33 = on 2s. */
+  stepMs?: number;
+  /** Canvas filter, e.g. 'blur(6px)' for depth of field or 'saturate(0.6) brightness(0.8)' for grading. */
+  filter?: string;
+  /** Keyframed filter: string at each t (stepped). */
+  filterKeys?: { t: number; filter: string }[];
   objects: DrawObject[];
 }
 

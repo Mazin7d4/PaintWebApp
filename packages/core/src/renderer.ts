@@ -29,7 +29,7 @@ function fillStyle(ctx: CanvasRenderingContext2D, fill: ShapeObject['fill'] | Te
     const g = fill.gradient;
     const grad =
       g.type === 'radial'
-        ? ctx.createRadialGradient(g.x0, g.y0, 0, g.x1, g.y1, Math.hypot(g.x1 - g.x0, g.y1 - g.y0) || 1)
+        ? ctx.createRadialGradient(g.x0, g.y0, 0, g.x0, g.y0, Math.hypot(g.x1 - g.x0, g.y1 - g.y0) || 1)
         : ctx.createLinearGradient(g.x0, g.y0, g.x1, g.y1);
     for (const stop of g.stops) grad.addColorStop(stop.offset, stop.color);
     ctx.fillStyle = grad;
@@ -91,14 +91,31 @@ function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: numb
   } else if (obj.shape === 'polygon' && obj.points) {
     obj.points.forEach((pt, i) => (i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y)));
     ctx.closePath();
-  } else if (obj.shape === 'path' && obj.path && typeof Path2D !== 'undefined') {
-    const path = new Path2D(obj.path);
-    if (obj.fill) {
-      fillStyle(ctx, obj.fill);
-      ctx.fill(path);
+  } else if (obj.shape === 'path' && (obj.path || obj.drawings) && typeof Path2D !== 'undefined') {
+    let d = obj.path ?? '';
+    let fill = obj.fill;
+    let stroke = obj.stroke;
+    if (obj.drawings) {
+      for (const k of obj.drawings) {
+        if (k.t > timeMs) break;
+        d = k.path;
+        fill = k.fill ?? fill;
+        stroke = k.stroke ?? stroke;
+      }
     }
-    if (obj.stroke) {
-      strokeStyle(ctx, obj.stroke);
+    if (!d) {
+      ctx.restore();
+      return;
+    }
+    const path = new Path2D(d);
+    if (fill) {
+      ctx.save();
+      fillStyle(ctx, fill);
+      ctx.fill(path);
+      ctx.restore();
+    }
+    if (stroke) {
+      strokeStyle(ctx, stroke);
       ctx.stroke(path);
     }
     ctx.restore();
@@ -160,7 +177,20 @@ function drawParticles(ctx: CanvasRenderingContext2D, obj: ParticleEmitterObject
   ctx.restore();
 }
 
-function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, timeMs: number): void {
+export function isShown(show: [number, number][] | undefined, t: number): boolean {
+  if (!show) return true;
+  for (const [a, b] of show) if (t >= a && t < b) return true;
+  return false;
+}
+
+export function quantizeTime(t: number, stepMs?: number): number {
+  if (!stepMs || stepMs <= 0) return t;
+  return Math.floor(t / stepMs + 1e-6) * stepMs;
+}
+
+function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, rawTimeMs: number): void {
+  if (!isShown(obj.show, rawTimeMs)) return;
+  const timeMs = quantizeTime(rawTimeMs, obj.stepMs);
   if (obj.type === 'stroke') {
     const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
     let reveal = obj.reveal ?? 1;
@@ -265,13 +295,17 @@ function applyCamera(ctx: CanvasRenderingContext2D, project: PaintProject, camer
 
 function paintLayers(ctx: CanvasRenderingContext2D, project: PaintProject, timeMs: number, camera: CameraState): void {
   for (const layer of project.layers) {
-    if (!layer.visible) continue;
+    if (!layer.visible || !isShown(layer.show, timeMs)) continue;
     ctx.save();
     applyCamera(ctx, project, camera, layer.parallax ?? 1);
     ctx.globalAlpha *= layer.opacity;
     ctx.globalCompositeOperation = layer.blendMode;
+    let filter = layer.filter;
+    if (layer.filterKeys?.length) for (const k of layer.filterKeys) if (k.t <= timeMs) filter = k.filter;
+    if (filter) (ctx as unknown as { filter: string }).filter = filter;
+    const lt = quantizeTime(timeMs, layer.stepMs);
     for (const obj of layer.objects) {
-      drawObject(ctx, obj, timeMs);
+      drawObject(ctx, obj, lt);
     }
     ctx.restore();
   }
