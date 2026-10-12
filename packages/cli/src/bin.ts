@@ -11,6 +11,10 @@ import {
   type PaintProject,
   type StylePresetId,
   type LlmProvider,
+  applyOps,
+  worldAabb,
+  EDIT_OP_NAMES,
+  type EditOp,
 } from '@paint-studio/core';
 import { renderGif, renderPngSequence, renderSpriteSheet, renderStill } from './render.js';
 
@@ -26,6 +30,12 @@ async function loadProject(file: string): Promise<PaintProject> {
     console.warn(`  warning ${w.path}: ${w.message}`);
   }
   return data as PaintProject;
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const c of process.stdin) chunks.push(c as Buffer);
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 const program = new Command();
@@ -91,6 +101,56 @@ program
       frames: p.frames.length,
       palette: p.palette.map((c) => c.hex),
     }, null, 2));
+  });
+
+program
+  .command('edit')
+  .description('Apply JSON edit ops (objects, transforms, keyframes, layers, frames) atomically')
+  .argument('<file>', 'project JSON')
+  .option('--ops <path>', 'JSON file containing an array of ops (use - for stdin)')
+  .option('--op <json...>', 'inline op JSON, repeatable')
+  .option('-o, --out <path>', 'write result here instead of in place')
+  .option('--dry-run', 'validate and print the result summary without writing')
+  .action(async (file: string, opts) => {
+    const project = await loadProject(file);
+    let ops: EditOp[] = [];
+    if (opts.ops) {
+      const raw = opts.ops === '-' ? await readStdin() : await readFile(opts.ops, 'utf8');
+      const parsed = JSON.parse(raw) as EditOp[] | { ops: EditOp[] };
+      ops = ops.concat(Array.isArray(parsed) ? parsed : parsed.ops);
+    }
+    for (const o of (opts.op as string[] | undefined) ?? []) ops.push(JSON.parse(o) as EditOp);
+    if (ops.length === 0) throw new Error(`No ops given. Use --ops file.json or --op '{"op":"..."}'. Ops: ${EDIT_OP_NAMES.join(', ')}`);
+    const { project: next, created } = applyOps(project, ops);
+    const result = validateProject(next);
+    if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
+    if (!opts.dryRun) await writeFile(opts.out ?? file, JSON.stringify(next, null, 2) + '\n');
+    console.log(JSON.stringify({ applied: ops.length, created, wrote: opts.dryRun ? null : opts.out ?? file }));
+  });
+
+program
+  .command('objects')
+  .alias('ls')
+  .description('List layers and objects with ids, keyframe times and world bounds at a time')
+  .argument('<file>', 'project JSON')
+  .option('--time <ms>', 'time to measure bounds at', '0')
+  .action(async (file: string, opts) => {
+    const p = await loadProject(file);
+    const t = Number(opts.time);
+    const rows = p.layers.map((l) => ({
+      layer: { id: l.id, name: l.name, visible: l.visible, locked: !!l.locked, opacity: l.opacity },
+      objects: l.objects.map((o) => {
+        const b = worldAabb(o, t);
+        return {
+          id: o.id,
+          type: o.type,
+          bounds: { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.w), h: Math.round(b.h) },
+          transform: o.transform ?? {},
+          keyframes: (o.keyframes ?? []).map((k) => k.t),
+        };
+      }),
+    }));
+    console.log(JSON.stringify(rows, null, 2));
   });
 
 program

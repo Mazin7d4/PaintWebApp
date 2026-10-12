@@ -8,6 +8,10 @@ import {
   validateProject,
   generateProjectFromPrompt,
   type StylePresetId,
+  type EditOp,
+  applyOps,
+  worldAabb,
+  EDIT_OP_NAMES,
 } from '@paint-studio/core';
 import { spawn } from 'node:child_process';
 
@@ -108,6 +112,45 @@ server.tool(
       content: [{ type: 'text', text: result.stdout || result.stderr }],
       isError: result.code !== 0,
     };
+  },
+);
+
+server.tool(
+  'paint_edit_project',
+  `Apply edit ops to a .paint.json atomically (one failing op aborts all). Ops: ${EDIT_OP_NAMES.join(', ')}. ` +
+    'Examples: {"op":"addObject","layerId":"L","object":{"type":"shape","shape":"ellipse","x":0,"y":0,"w":80,"h":80,"fill":{"color":"#FFD600"}}}, ' +
+    '{"op":"setKeyframe","id":"ball","t":500,"transform":{"y":300,"scaleY":0.7},"easing":"easeOutBounce"}, ' +
+    '{"op":"setTransform","id":"ball","transform":{"rotation":45}}, {"op":"setLayer","layerId":"L","props":{"opacity":0.5}}',
+  {
+    file: z.string(),
+    ops: z.array(z.record(z.unknown())).describe('Array of edit ops ({ op: string, ... })'),
+    out: z.string().optional().describe('Write to this path instead of in place'),
+  },
+  async ({ file, ops, out }) => {
+    try {
+      const project = JSON.parse(await readFile(file, 'utf8'));
+      const { project: next, created } = applyOps(project, ops as unknown as EditOp[]);
+      const result = validateProject(next);
+      if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
+      await writeFile(out ?? file, JSON.stringify(next, null, 2) + '\n');
+      return { content: [{ type: 'text', text: JSON.stringify({ applied: ops.length, created, wrote: out ?? file }) }] };
+    } catch (err) {
+      return { content: [{ type: 'text', text: (err as Error).message }], isError: true };
+    }
+  },
+);
+
+server.tool(
+  'paint_list_objects',
+  'List layers and objects (ids, type, world bounds at a time, transform, keyframe times) so you can target edits',
+  { file: z.string(), timeMs: z.number().optional() },
+  async ({ file, timeMs }) => {
+    const p = JSON.parse(await readFile(file, 'utf8'));
+    const rows = (p.layers as { id: string; name: string; objects: Parameters<typeof worldAabb>[0][] }[]).map((l) => ({
+      layer: { id: l.id, name: l.name },
+      objects: l.objects.map((o) => ({ id: o.id, type: o.type, bounds: worldAabb(o, timeMs ?? 0), transform: o.transform ?? {}, keyframes: (o.keyframes ?? []).map((k) => k.t) })),
+    }));
+    return { content: [{ type: 'text', text: JSON.stringify(rows, null, 2) }] };
   },
 );
 
