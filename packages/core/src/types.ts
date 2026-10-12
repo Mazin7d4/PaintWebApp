@@ -78,6 +78,30 @@ export interface StrokeStyle {
   lineCap?: CanvasLineCap;
   lineJoin?: CanvasLineJoin;
   dash?: number[];
+  /** Inked line: taper at open ends (0..1 of length). Setting taper/weight/boil switches to variable-width brush-pen rendering. */
+  taper?: number;
+  /** Line-weight variation 0..1: edges facing away from the light get heavier, plus hand-pressure wobble. */
+  weight?: number;
+  /** Light direction (deg, screen space, pointing toward the light) used for line weight; defaults to layer light. */
+  light?: number;
+  /** Line boil amplitude in px (held drawings shimmer like hand-traced frames). */
+  boil?: number;
+  /** Line boil cadence in ms (default 125 = on 3s). */
+  boilMs?: number;
+  seed?: number;
+}
+
+/** Cel shading for closed shapes: hard-edged shadow tones + rim light from a light direction. */
+export interface CelStyle {
+  shade?: string;
+  shadeDist?: number;
+  /** Deeper core-shadow tone hugging the far edge (shade2Dist < shadeDist). */
+  shade2?: string;
+  shade2Dist?: number;
+  rim?: string;
+  rimDist?: number;
+  /** Light direction in degrees (toward the light). Defaults to the layer light. */
+  light?: number;
 }
 
 export interface FillStyle {
@@ -168,7 +192,8 @@ export interface ShapeObject {
   points?: Vec2[];
   path?: string;
   /** Key drawings: from each t the path (and optional fill/stroke) is swapped in. Drawing library + replacement animation. */
-  drawings?: { t: number; path: string; fill?: FillStyle; stroke?: StrokeStyle }[];
+  drawings?: { t: number; path: string; fill?: FillStyle; stroke?: StrokeStyle; cel?: CelStyle }[];
+  cel?: CelStyle;
   fill?: FillStyle;
   stroke?: StrokeStyle;
   shadow?: ShadowStyle;
@@ -254,6 +279,10 @@ export interface Layer {
   filter?: string;
   /** Keyframed filter: string at each t (stepped). */
   filterKeys?: { t: number; filter: string }[];
+  /** Light direction (deg toward the light) for cel shading + ink weight of objects in this layer. */
+  light?: number;
+  /** Override rim-light colour for cel-shaded objects in this layer (e.g. amber near the Sun Core). */
+  rim?: string;
   objects: DrawObject[];
 }
 

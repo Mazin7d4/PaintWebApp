@@ -12,3 +12,4 @@ export * from './hyperframes.js';
 export * from './generate.js';
 export * from './geometry.js';
 export * from './ops.js';
+export * from './ink.js';

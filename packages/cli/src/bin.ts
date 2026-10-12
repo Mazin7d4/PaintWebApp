@@ -161,6 +161,7 @@ program
   .option('--format <fmt>', 'gif | png | png-sequence | spritesheet | mp4 | webm (default: from --out extension, else gif)')
   .option('--scale <k>', 'video output scale relative to project size', '1')
   .option('--crf <n>', 'video quality (lower = better)')
+  .option('--post <fx>', 'video post pass: grain | glow | grain+glow | raw ffmpeg filter graph')
   .option('--from <ms>', 'video: start time')
   .option('--to <ms>', 'video: end time')
   .option('--fps <fps>', 'override export fps')
@@ -192,6 +193,7 @@ program
         fps,
         scale: Number(opts.scale),
         crf: opts.crf ? Number(opts.crf) : undefined,
+        post: opts.post,
         fromMs: opts.from ? Number(opts.from) : undefined,
         toMs: opts.to ? Number(opts.to) : undefined,
         onProgress: (d, n) => {

@@ -101,7 +101,21 @@ export interface VideoOptions {
   /** Render only this time range (ms) */
   fromMs?: number;
   toMs?: number;
+  /** Post pass: 'grain', 'glow', 'grain+glow' presets or a raw ffmpeg -vf filter graph. */
+  post?: string;
   onProgress?: (done: number, total: number) => void;
+}
+
+/** Cheap CPU post pass presets (film grain, soft bloom) as ffmpeg filter graphs. */
+export const POST_PRESETS: Record<string, string> = {
+  grain: 'noise=c0s=7:c0f=t+u:c1s=3:c2s=3',
+  glow: 'split[a][b];[b]gblur=sigma=18,curves=all=0/0 0.55/0.25 1/0.9[g];[a][g]blend=all_mode=screen:all_opacity=0.35',
+  'grain+glow': 'split[a][b];[b]gblur=sigma=18,curves=all=0/0 0.55/0.25 1/0.9[g];[a][g]blend=all_mode=screen:all_opacity=0.35,noise=c0s=7:c0f=t+u:c1s=3:c2s=3',
+};
+export function postFilter(post?: string): string[] {
+  if (!post) return [];
+  const g = POST_PRESETS[post] ?? post;
+  return g.includes(';') || g.includes('[') ? ['-filter_complex', g] : ['-vf', g];
 }
 
 /** Stream raw RGBA frames into ffmpeg → H.264 MP4 or VP9 WebM (silent, yuv420p). */
@@ -119,7 +133,7 @@ export async function renderVideo(project: PaintProject, outFile: string, opts: 
   const args = [
     '-y', '-loglevel', 'error',
     '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${w}x${h}`, '-r', String(fps), '-i', '-',
-    '-an', ...codec, '-pix_fmt', 'yuv420p', '-r', String(fps), outFile,
+    '-an', ...postFilter(opts.post), ...codec, '-pix_fmt', 'yuv420p', '-r', String(fps), outFile,
   ];
   const ff = spawn(process.env.FFMPEG_PATH ?? 'ffmpeg', args, { stdio: ['pipe', 'inherit', 'inherit'] });
   const exited = new Promise<number>((resolve, reject) => {

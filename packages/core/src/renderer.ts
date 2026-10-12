@@ -1,4 +1,5 @@
 import { drawStroke } from './brushes.js';
+import { drawCel, drawInkOutline, isInk } from './ink.js';
 import { frameIndexAtTime, projectDurationMs, timeAtFrameStart } from './project.js';
 import { getStylePreset } from './styles.js';
 import { sampleCamera, sampleTransform } from './tween.js';
@@ -65,7 +66,8 @@ function seededRandom(seed: number): () => number {
   };
 }
 
-function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: number): void {
+interface LayerEnv { light?: number; rim?: string }
+function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: number, env: LayerEnv = {}): void {
   const tf = sampleTransform(obj.keyframes, timeMs, obj.transform);
   ctx.save();
   applyTransform(ctx, tf, obj.pivot?.x ?? (obj.x ?? 0) + (obj.w ?? 0) / 2, obj.pivot?.y ?? (obj.y ?? 0) + (obj.h ?? 0) / 2);
@@ -95,12 +97,14 @@ function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: numb
     let d = obj.path ?? '';
     let fill = obj.fill;
     let stroke = obj.stroke;
+    let cel = obj.cel;
     if (obj.drawings) {
       for (const k of obj.drawings) {
         if (k.t > timeMs) break;
         d = k.path;
         fill = k.fill ?? fill;
         stroke = k.stroke ?? stroke;
+        cel = k.cel ?? cel;
       }
     }
     if (!d) {
@@ -113,10 +117,14 @@ function drawShape(ctx: CanvasRenderingContext2D, obj: ShapeObject, timeMs: numb
       fillStyle(ctx, fill);
       ctx.fill(path);
       ctx.restore();
+      if (cel) drawCel(ctx, path, cel, env.light, env.rim);
     }
     if (stroke) {
-      strokeStyle(ctx, stroke);
-      ctx.stroke(path);
+      if (isInk(stroke)) drawInkOutline(ctx, d, stroke, timeMs, env.light);
+      else {
+        strokeStyle(ctx, stroke);
+        ctx.stroke(path);
+      }
     }
     ctx.restore();
     return;
@@ -188,7 +196,7 @@ export function quantizeTime(t: number, stepMs?: number): number {
   return Math.floor(t / stepMs + 1e-6) * stepMs;
 }
 
-function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, rawTimeMs: number): void {
+function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, rawTimeMs: number, env: LayerEnv = {}): void {
   if (!isShown(obj.show, rawTimeMs)) return;
   const timeMs = quantizeTime(rawTimeMs, obj.stepMs);
   if (obj.type === 'stroke') {
@@ -202,7 +210,7 @@ function drawObject(ctx: CanvasRenderingContext2D, obj: DrawObject, rawTimeMs: n
     drawStroke(ctx, obj.brush, obj.points, reveal);
     ctx.restore();
   } else if (obj.type === 'shape') {
-    drawShape(ctx, obj, timeMs);
+    drawShape(ctx, obj, timeMs, env);
   } else if (obj.type === 'text') {
     drawText(ctx, obj, timeMs);
   } else if (obj.type === 'particles') {
@@ -305,7 +313,7 @@ function paintLayers(ctx: CanvasRenderingContext2D, project: PaintProject, timeM
     if (filter) (ctx as unknown as { filter: string }).filter = filter;
     const lt = quantizeTime(timeMs, layer.stepMs);
     for (const obj of layer.objects) {
-      drawObject(ctx, obj, lt);
+      drawObject(ctx, obj, lt, layer);
     }
     ctx.restore();
   }
