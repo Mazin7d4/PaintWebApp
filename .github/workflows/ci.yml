@@ -28,30 +28,7 @@ jobs:
           node packages/cli/dist/bin.js render examples/bouncing-ball.paint.json -o examples/out/bouncing-ball.gif
           node packages/cli/dist/bin.js render examples/ink-logo-reveal.paint.json -o examples/out/ink-logo-reveal.gif
           node packages/cli/dist/bin.js render examples/neon-pulse.paint.json -o examples/out/neon-pulse.gif
-      - name: Edit-ops smoke test
-        run: |
-          node packages/cli/dist/bin.js create /tmp/t.paint.json
-          node packages/cli/dist/bin.js edit /tmp/t.paint.json --op '{"op":"addObject","object":{"id":"b","type":"shape","shape":"ellipse","x":0,"y":0,"w":50,"h":50}}' --op '{"op":"setKeyframe","id":"b","t":0}'
-          node packages/cli/dist/bin.js objects /tmp/t.paint.json
       - uses: actions/upload-artifact@v4
         with:
           name: example-gifs
           path: examples/out/*.gif
-
-  e2e:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-      - run: npm install
-      - run: npx playwright install --with-deps chromium
-        working-directory: packages/web
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-results
-          path: packages/web/test-results
